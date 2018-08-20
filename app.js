@@ -28,7 +28,7 @@ app.post("/echo", function (req, res) {
     }
     */
 
-    var intent = req.body.intent && req.body.intent.name ? req.body.intent.name : null
+    var intent = req.body.queryResult && req.body.queryResult.intent && req.body.queryResult.intent.displayName ? req.body.queryResult.intent.displayName : null
     var intentText = ""
     if (intent != null) {
         intentText = "The intent of the request was " + intent;
