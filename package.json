@@ -1,0 +1,30 @@
+{
+  "name": "line_info_node_webhook",
+  "version": "1.0.0",
+  "description": "* Demo node js app code - https://github.com/crm911/dialogflow\r * Dialogflow official webhook handling code - https://stackoverflow.com/questions/48967320/how-to-use-dialogflow-communicating-with-heroku",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nagasudhirpulla/ine_info_node_webhook.git"
+  },
+  "keywords": [
+    "webhook",
+    "nlp",
+    "dialogflow",
+    "node",
+    "js"
+  ],
+  "author": "Nagasudhir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nagasudhirpulla/ine_info_node_webhook/issues"
+  },
+  "homepage": "https://github.com/nagasudhirpulla/ine_info_node_webhook#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
+  }
+}
