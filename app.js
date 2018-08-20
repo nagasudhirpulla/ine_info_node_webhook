@@ -21,7 +21,7 @@ app.post("/echo", function (req, res) {
             ? req.body.queryResult.queryText
             : "Seems like some problem. Speak again.";
     return res.json({
-        fulfillmentText: "This is a text response",
+        fulfillmentText: speech,
         source: "webhook-echo-sample"
     });
 });
