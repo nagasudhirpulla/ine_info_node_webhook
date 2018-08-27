@@ -14,6 +14,8 @@ app.use(bodyParser.json());
 
 app.use(express.json());
 
+app.use("/line_info",require('./controllers/lineController'));
+
 app.post("/echo", function (req, res) {
     var speechText =
         req.body.queryResult &&
@@ -42,9 +44,8 @@ app.post("/echo", function (req, res) {
 app.get("/", function (req, res) {
     return res.json({
         fulfillmentText: "This is a text response",
-        source: "webhook-echo-sample"
+        source: "webhook-line-info"
     });
 });
 
 app.listen(process.env.PORT || 3000, () => console.log('App listening on port 3000!'));
-
