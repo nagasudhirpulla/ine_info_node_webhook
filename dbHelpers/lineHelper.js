@@ -27,7 +27,12 @@ module.exports.getLineObjBySSNames = function (ss1Str, ss2Str) {
     for (let lineIter = 1; lineIter < lines.length; lineIter++) {
         var lineRow = lines[lineIter];
         // todo do better searching by using regex
-        if ((lineRow[ss1Index].indexOf(ss1Str) > -1 && lineRow[ss2Index].indexOf(ss2Str) > -1)||(lineRow[ss2Index].indexOf(ss1Str) > -1 && lineRow[ss1Index].indexOf(ss2Str) > -1)) {
+        var rowSS1 = (lineRow[ss1Index] + '').toLowerCase();
+        var rowSS2 = (lineRow[ss2Index] + '').toLowerCase();
+        var lowerReqSS1 = (ss1Str + '').toLowerCase();
+        var lowerReqSS2 = (ss2Str + '').toLowerCase();
+        
+        if ((rowSS1.indexOf(lowerReqSS1) > -1 && rowSS2.indexOf(lowerReqSS2) > -1)||(rowSS2.indexOf(lowerReqSS1) > -1 && rowSS1.indexOf(lowerReqSS2) > -1)) {
             // we got a match
             reqLine = lineRow;
             break;
