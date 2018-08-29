@@ -34,20 +34,20 @@ router.post('/', function (req, res, next) {
 
         if (["line length", "length", "distance"].indexOf(lineMetric) > -1) {
             var lineLength = lineObj[linesHelper.lengthHeading];
-            speechText = `${lineLength} kilometers is ${lineMetric} of ${ss1Name} ${ss2Name}`;
+            speechText = `${lineLength} kilometers is ${lineMetric} of ${ss1Name} ${ss2Name}, please ask another line information...`;
         } else if (["sil", "surge impedance loading"].indexOf(lineMetric) > -1) {
             var sil = lineObj[linesHelper.silHeading];
-            speechText = `${sil} is ${lineMetric} of ${ss1Name} ${ss2Name}`;
+            speechText = `${sil} is ${lineMetric} of ${ss1Name} ${ss2Name}, please ask another line information...`;
         } else if (["conductor", "conductor type"].indexOf(lineMetric) > -1) {
             var conductor = lineObj[linesHelper.conductorHeading];
-            speechText = `${conductor} is ${lineMetric} of ${ss1Name} ${ss2Name}`;
+            speechText = `${conductor} is ${lineMetric} of ${ss1Name} ${ss2Name}, please ask another line information...`;
         } else if (["owner info", "owner information"].indexOf(lineMetric) > -1) {
             var ss1Name = lineObj[linesHelper.ss1Heading];
             var ss2Name = lineObj[linesHelper.ss2Heading];
             var ss1Owner = lineObj[linesHelper.ss1OwnerHeading];
             var ss2Owner = lineObj[linesHelper.ss2OwnerHeading];
             var lineOwner = lineObj[linesHelper.lineOwnerHeading];
-            speechText = `${lineOwner} is the line owner of ${ss1Name} ${ss2Name}. ${ss1Name} owner is ${ss1Owner}, ${ss2Name} owner is ${ss2Owner}`;
+            speechText = `${lineOwner} is the line owner of ${ss1Name} ${ss2Name}. ${ss1Name} owner is ${ss1Owner}, ${ss2Name} owner is ${ss2Owner}, please ask another line information...`;
         } else {
             speechText = `Sorry, we dont have information regarding the ${lineMetric} of ${ss1Name} ${ss2Name}, please ask about another line characteristic...`
         }
