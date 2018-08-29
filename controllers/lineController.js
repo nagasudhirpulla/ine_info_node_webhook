@@ -7,7 +7,7 @@ router.post('/', function (req, res, next) {
     //console.log(req.body);
     if (queryText === null) {
         return res.json({
-            fulfillmentText: 'Seems like some problem occured. Kindly speak again.',
+            fulfillmentText: 'Seems like some problem occured. Kindly speak again...',
             source: sourceName
         });
     }
@@ -18,19 +18,19 @@ router.post('/', function (req, res, next) {
             req.body.queryResult.parameters
             ? req.body.queryResult.parameters
             : null;
-    var ss1Name = queryParams && queryParams.substation && queryParams.substation[0] ? queryParams.substation[0] : null;
-    var ss2Name = queryParams && queryParams.substation1 && queryParams.substation1[0] ? queryParams.substation1[0] : null;
+    var ss1Name = queryParams && queryParams.from_substation && queryParams.from_substation[0] ? queryParams.from_substation[0] : null;
+    var ss2Name = queryParams && queryParams.to_substation && queryParams.to_substation[0] ? queryParams.to_substation[0] : null;
     var lineMetric = queryParams && queryParams.line_metric && queryParams.line_metric[0] ? queryParams.line_metric[0] : null;
     if (intentName == 'line_info' && queryParams != null && ss1Name != null && ss2Name != null && lineMetric != null) {
         // we have all required params for giving line info
         var lineObj = linesHelper.getLineObjBySSNames(ss1Name, ss2Name);
         if (lineObj === null) {
             return res.json({
-                fulfillmentText: `Sorry, could not find the line ${ss1Name} ${ss2Name}`,
+                fulfillmentText: `Sorry, could not find the line ${ss1Name} ${ss2Name}, please ask about another line...`,
                 source: sourceName
             });
         }
-        var speechText = 'Sorry, some problem occured';
+        var speechText = 'Sorry, some problem occured, please speak again...';
 
         if (["line length", "length", "distance"].indexOf(lineMetric) > -1) {
             var lineLength = lineObj[linesHelper.lengthHeading];
@@ -49,7 +49,7 @@ router.post('/', function (req, res, next) {
             var lineOwner = lineObj[linesHelper.lineOwnerHeading];
             speechText = `${lineOwner} is the line owner of ${ss1Name} ${ss2Name}. ${ss1Name} owner is ${ss1Owner}, ${ss2Name} owner is ${ss2Owner}`;
         } else {
-            speechText = `Sorry, we dont have information regarding the ${lineMetric} of ${ss1Name} ${ss2Name}`
+            speechText = `Sorry, we dont have information regarding the ${lineMetric} of ${ss1Name} ${ss2Name}, please ask about another line characteristic...`
         }
 
         // return the response
@@ -60,7 +60,7 @@ router.post('/', function (req, res, next) {
 
     } else {
         return res.json({
-            fulfillmentText: `Sorry, could not extract all the required parameters from ${queryText}`,
+            fulfillmentText: `Sorry, could not extract all the required parameters from ${queryText}, please ask again...`,
             source: sourceName
         });
     }
