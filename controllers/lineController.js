@@ -27,7 +27,7 @@ router.post('/', function (req, res, next) {
         var lineObj = linesHelper.getLineObjBySSNames(ss1Name, ss2Name, lineVoltage);
         if (lineObj === null) {
             return res.json({
-                fulfillmentText: `Sorry, could not find the line ${ss1Name} ${ss2Name}, please ask about another line...`,
+                fulfillmentText: `Sorry, we could not find the line ${ss1Name} ${ss2Name}, please ask about another line...`,
                 source: sourceName
             });
         }
@@ -67,7 +67,7 @@ router.post('/', function (req, res, next) {
                 `please ask another line information...`;
         }
         else {
-            speechText = `Sorry, we dont have information regarding the ${lineMetric} of ${ss1Name} ${ss2Name}, please ask about another line characteristic...`
+            speechText = `Sorry, we do not have information regarding the ${lineMetric} of ${ss1Name} ${ss2Name}, please ask about another line characteristic...`
         }
         // return the response
         return res.json({
