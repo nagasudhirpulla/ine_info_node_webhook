@@ -21,9 +21,10 @@ router.post('/', function (req, res, next) {
     var ss1Name = queryParams && queryParams.from_substation && queryParams.from_substation[0] ? queryParams.from_substation[0] : null;
     var ss2Name = queryParams && queryParams.to_substation && queryParams.to_substation[0] ? queryParams.to_substation[0] : null;
     var lineMetric = queryParams && queryParams.line_metric && queryParams.line_metric[0] ? queryParams.line_metric[0] : null;
+    var lineVoltage = queryParams && queryParams.voltage && queryParams.voltage[0] ? queryParams.voltage[0] : null;
     if (intentName == 'line_info' && queryParams != null && ss1Name != null && ss2Name != null && lineMetric != null) {
         // we have all required params for giving line info
-        var lineObj = linesHelper.getLineObjBySSNames(ss1Name, ss2Name);
+        var lineObj = linesHelper.getLineObjBySSNames(ss1Name, ss2Name, lineVoltage);
         if (lineObj === null) {
             return res.json({
                 fulfillmentText: `Sorry, could not find the line ${ss1Name} ${ss2Name}, please ask about another line...`,
@@ -31,36 +32,66 @@ router.post('/', function (req, res, next) {
             });
         }
         var speechText = 'Sorry, some problem occured, please speak again...';
-
+        var voltName = lineObj[linesHelper.voltHeading];
         if (["line length", "length", "distance"].indexOf(lineMetric) > -1) {
             var lineLength = lineObj[linesHelper.lengthHeading];
-            speechText = `${lineLength} kilometers is ${lineMetric} of ${ss1Name} ${ss2Name}, please ask another line information...`;
+            speechText = `${lineLength} kilometers is ${lineMetric} of ${voltName} KV ${ss1Name} ${ss2Name}, please ask another line information...`;
         } else if (["sil", "surge impedance loading"].indexOf(lineMetric) > -1) {
             var sil = lineObj[linesHelper.silHeading];
-            speechText = `${sil} is ${lineMetric} of ${ss1Name} ${ss2Name}, please ask another line information...`;
+            speechText = `${sil} is ${lineMetric} of ${voltName} KV ${ss1Name} ${ss2Name}, please ask another line information...`;
         } else if (["conductor", "conductor type"].indexOf(lineMetric) > -1) {
             var conductor = lineObj[linesHelper.conductorHeading];
-            speechText = `${conductor} is ${lineMetric} of ${ss1Name} ${ss2Name}, please ask another line information...`;
-        } else if (["owner info", "owner information"].indexOf(lineMetric) > -1) {
+            speechText = `${conductor} is ${lineMetric} of ${voltName} KV ${ss1Name} ${ss2Name}, please ask another line information...`;
+        } else if (["ownership information", "owner info", "owner information"].indexOf(lineMetric) > -1) {
             var ss1Name = lineObj[linesHelper.ss1Heading];
             var ss2Name = lineObj[linesHelper.ss2Heading];
             var ss1Owner = lineObj[linesHelper.ss1OwnerHeading];
             var ss2Owner = lineObj[linesHelper.ss2OwnerHeading];
             var lineOwner = lineObj[linesHelper.lineOwnerHeading];
-            speechText = `${lineOwner} is the line owner of ${ss1Name} ${ss2Name}. ${ss1Name} owner is ${ss1Owner}, ${ss2Name} owner is ${ss2Owner}, please ask another line information...`;
-        } else {
+            speechText = `${lineOwner} is the line owner of ${voltName} KV ${ss1Name} ${ss2Name}. ${ss1Name} owner is ${ss1Owner}, ${ss2Name} owner is ${ss2Owner}, please ask another line information...`;
+        } else if (["total information"].indexOf(lineMetric) > -1) {
+            var ss1Name = lineObj[linesHelper.ss1Heading];
+            var ss2Name = lineObj[linesHelper.ss2Heading];
+            var ss1Owner = lineObj[linesHelper.ss1OwnerHeading];
+            var ss2Owner = lineObj[linesHelper.ss2OwnerHeading];
+            var lineOwner = lineObj[linesHelper.lineOwnerHeading];
+            var lineLength = lineObj[linesHelper.lengthHeading];
+            var conductor = lineObj[linesHelper.conductorHeading];
+            var sil = lineObj[linesHelper.silHeading];
+            speechText = `${lineOwner} is the line owner ` +
+                `of ${voltName} KV ${ss1Name} ${ss2Name}. ${ss1Name} owner is ${ss1Owner}, ` +
+                `${ss2Name} owner is ${ss2Owner}. ` +
+                `Line length is ${lineLength}. ` +
+                `Conductor type is ${conductor}. ` +
+                `S I L is ${sil}, ` +
+                `please ask another line information...`;
+        }
+        else {
             speechText = `Sorry, we dont have information regarding the ${lineMetric} of ${ss1Name} ${ss2Name}, please ask about another line characteristic...`
         }
-
         // return the response
         return res.json({
             fulfillmentText: speechText,
             source: sourceName
         });
-
     } else {
+        if (intentName == 'line_info' && queryParams != null) {
+            var unCapturedVars = [];
+            if (ss1Name == null) {
+                unCapturedVars.push('from substation');
+            }
+            if (ss2Name == null) {
+                unCapturedVars.push('to substation');
+            }
+            if (lineMetric == null) {
+                unCapturedVars.push('line metric');
+            }
+            var speechText = `Sorry, we could not extract ${unCapturedVars} from your query, please ask again...`;
+        } else {
+            speechText = `Sorry, we could not extract all the required parameters from ${queryText}, please ask again...`;
+        }
         return res.json({
-            fulfillmentText: `Sorry, could not extract all the required parameters from ${queryText}, please ask again...`,
+            fulfillmentText: speechText,
             source: sourceName
         });
     }

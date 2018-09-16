@@ -11,7 +11,8 @@ var noLoadMvarHeading = module.exports.noLoadMvarHeading = 'No Load MVAR Generat
 var lineOwnerHeading = module.exports.lineOwnerHeading = 'Line Owner';
 var ss1OwnerHeading = module.exports.ss1OwnerHeading = 'End-1 Owner';
 var ss2OwnerHeading = module.exports.ss2OwnerHeading = 'End-2 Owner';
-var ss1Index = module.exports.ss1Index =headings.indexOf(ss1Heading);
+var voltHeading = module.exports.voltHeading = 'voltage';
+var ss1Index = module.exports.ss1Index = headings.indexOf(ss1Heading);
 var ss2Index = module.exports.ss2Index = headings.indexOf(ss2Heading);
 var lengthIndex = module.exports.lengthIndex = headings.indexOf(lengthHeading);
 var conductorIndex = module.exports.conductorIndex = headings.indexOf(conductorHeading);
@@ -20,8 +21,9 @@ var noLoadMvarIndex = module.exports.noLoadMvarIndex = headings.indexOf(noLoadMv
 var lineOwnerIndex = module.exports.lineOwnerIndex = headings.indexOf(lineOwnerHeading);
 var ss1OwnerIndex = module.exports.ss1OwnerIndex = headings.indexOf(ss1OwnerHeading);
 var ss2OwnerIndex = module.exports.ss2OwnerIndex = headings.indexOf(ss2OwnerHeading);
+var voltIndex = module.exports.voltIndex = headings.indexOf(voltHeading);
 
-module.exports.getLineObjBySSNames = function (ss1Str, ss2Str) {
+module.exports.getLineObjBySSNames = function (ss1Str, ss2Str, lineVoltage) {
     var reqLine = null
     //search for the line
     for (let lineIter = 1; lineIter < lines.length; lineIter++) {
@@ -31,11 +33,21 @@ module.exports.getLineObjBySSNames = function (ss1Str, ss2Str) {
         var rowSS2 = (lineRow[ss2Index] + '').toLowerCase();
         var lowerReqSS1 = (ss1Str + '').toLowerCase();
         var lowerReqSS2 = (ss2Str + '').toLowerCase();
-        
-        if ((rowSS1.indexOf(lowerReqSS1) > -1 && rowSS2.indexOf(lowerReqSS2) > -1)||(rowSS2.indexOf(lowerReqSS1) > -1 && rowSS1.indexOf(lowerReqSS2) > -1)) {
-            // we got a match
-            reqLine = lineRow;
-            break;
+        var rowVolt = (lineRow[voltIndex] + '').toLowerCase();
+
+        if ((rowSS1.indexOf(lowerReqSS1) > -1 && rowSS2.indexOf(lowerReqSS2) > -1) || (rowSS2.indexOf(lowerReqSS1) > -1 && rowSS1.indexOf(lowerReqSS2) > -1)) {
+            if (lineVoltage == undefined ||lineVoltage == null || lineVoltage == '') {
+                // we got a match
+                reqLine = lineRow;
+                break;
+            } else {
+                // we have to check for line voltage also
+                if (lineVoltage == rowVolt) {
+                    // we got a match
+                    reqLine = lineRow;
+                    break;
+                }
+            }
         }
     }
     if (reqLine === null) {
@@ -49,7 +61,7 @@ module.exports.getLineObjBySSNames = function (ss1Str, ss2Str) {
 var convertArrayToObj = function (headings, lineRow) {
     var reqLineObj = {};
     for (let headingIter = 0; headingIter < headings.length; headingIter++) {
-        reqLineObj[headings[headingIter]] = lineRow[headingIter];        
+        reqLineObj[headings[headingIter]] = lineRow[headingIter];
     }
     return reqLineObj
 }
