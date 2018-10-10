@@ -125,8 +125,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
     } else {
         speechText = 'Sorry, we could not figure out the wbes entity from your query, please try again...';
         return callback(null, { 'speechText': speechText });
-    }
-    return callback({ 'message': 'Some error occured...' });
+    }    
 };
 
 function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statistic, blockNum) {
