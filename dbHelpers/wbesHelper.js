@@ -74,7 +74,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             if (blk < 1 || blk > 96) {
                                 continue;
                             }
-                            //var genNames = dcMatrixObj["gen_names"];
+                            var genNames = dcMatrixObj["gen_names"];
                             //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                             //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
                             var totDCVal = (+dcMatrixObj[genNames[0]]['total_dc'][blk - 1]).toFixed(0);
@@ -99,7 +99,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             if (blk < 1 || blk > 96) {
                                 continue;
                             }
-                            //var genNames = dcMatrixObj["gen_names"];
+                            var genNames = dcMatrixObj["gen_names"];
                             //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                             //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
                             var schVal = (+netSchMatrixObj[genNames[0]]['total'][blk - 1]).toFixed(0);
