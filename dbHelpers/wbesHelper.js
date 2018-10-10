@@ -138,7 +138,13 @@ function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statis
         speechText = `${wbesEntity} ${wbesMetric} minimum value is ${minVal}. Please ask for another information...`;
     }
     else if (statistic == avgStatStr) {
-        var avgVal = blkVals.reduce((a, b) => a + b, 0) / blkVals.length;
+        var avgVal = 0;
+        for (let iter = 0; iter < blkVals.length; iter++) {
+            const val = blkVals[iter];
+            avgVal = avgVal + val;
+        }
+        avgVal = avgVal / blkVals.length;
+        avgVal = avgVal.toFixed(0);
         speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal}. Please ask for another information...`;
     }
     else if (blockNum != null) {
