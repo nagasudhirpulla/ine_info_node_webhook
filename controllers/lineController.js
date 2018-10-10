@@ -76,15 +76,17 @@ router.post('/', function (req, res, next) {
         });
     }
     else if (intentName == 'wbes_info' && queryParams != null) {
+        //extracting the query parameters
         var wbesEntity = queryParams && queryParams.wbes_entity && queryParams.wbes_entity[0] ? queryParams.wbes_entity[0] : null;
         var wbesMetric = queryParams && queryParams.wbes_metric && queryParams.wbes_metric[0] ? queryParams.wbes_metric[0] : null;
         var blockNum = queryParams && queryParams.block && queryParams.block[0] ? queryParams.block[0] : null;
         var revNum = queryParams && queryParams.revision_number && queryParams.revision_number[0] ? queryParams.revision_number[0] : null;
         var statistic = queryParams && queryParams.statistic && queryParams.statistic[0] ? queryParams.statistic[0] : null;
         var dateStr = queryParams && queryParams.date && queryParams.date[0] ? queryParams.date[0] : null;
-
-        // for testing purpose we are echoing the question parameters
+        
         speechText = '';
+        
+        // for testing purpose we are echoing the question parameters
         var entitySpeeches = [];
         if (wbesEntity != null) {
             entitySpeeches.push(`entity is ${wbesEntity}`);
@@ -110,6 +112,8 @@ router.post('/', function (req, res, next) {
         } else {
             speechText = 'Sorry I could not figure out any parameters from our query...';
         }
+
+        // todo use the wbes modules to get the values
         // return the response
         return res.json({
             fulfillmentText: speechText,
