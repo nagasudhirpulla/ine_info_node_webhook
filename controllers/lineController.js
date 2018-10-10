@@ -74,6 +74,47 @@ router.post('/', function (req, res, next) {
             fulfillmentText: speechText,
             source: sourceName
         });
+    }
+    else if (intentName == 'wbes_info' && queryParams != null) {
+        var wbesEntity = queryParams && queryParams.wbes_entity && queryParams.wbes_entity[0] ? queryParams.wbes_entity[0] : null;
+        var wbesMetric = queryParams && queryParams.wbes_metric && queryParams.wbes_metric[0] ? queryParams.wbes_metric[0] : null;
+        var blockNum = queryParams && queryParams.block && queryParams.block[0] ? queryParams.block[0] : null;
+        var revNum = queryParams && queryParams.revision_number && queryParams.revision_number[0] ? queryParams.revision_number[0] : null;
+        var statistic = queryParams && queryParams.statistic && queryParams.statistic[0] ? queryParams.statistic[0] : null;
+        var dateStr = queryParams && queryParams.date && queryParams.date[0] ? queryParams.date[0] : null;
+
+        // for testing purpose we are echoing the question parameters
+        speechText = '';
+        var entitySpeeches = [];
+        if (wbesEntity != null) {
+            entitySpeeches.push(`entity is ${wbesEntity}`);
+        }
+        if (wbesMetric != null) {
+            entitySpeeches.push(`metric is ${wbesMetric}`);
+        }
+        if (blockNum != null) {
+            entitySpeeches.push(`block number is ${blockNum}`);
+        }
+        if (revNum != null) {
+            entitySpeeches.push(`revision is ${revNum}`);
+        }
+        if (statistic != null) {
+            entitySpeeches.push(`statistic is ${statistic}`);
+        }
+        if (dateStr != null) {
+            entitySpeeches.push(`date is ${dateStr}`);
+        }
+
+        if (entitySpeeches.length > 0) {
+            speechText = entitySpeeches.join(', ');
+        } else {
+            speechText = 'Sorry I could not figure out any parameters from our query...';
+        }
+        // return the response
+        return res.json({
+            fulfillmentText: speechText,
+            source: sourceName
+        });
     } else {
         if (intentName == 'line_info' && queryParams != null) {
             var unCapturedVars = [];
