@@ -2,7 +2,7 @@
  * Created by Nagasudhir on 12/10/2017.
  */
 var WBESUtils = require("../utils/nrWbesUtils");
-var ArrayHelper = require('../helpers/arrayHelpers');
+var ArrayHelper = require('../utils/arrayHelpers');
 
 var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId, callback) {
     WBESUtils.getISGSDeclarationsArray(dateStr, rev, utilId, function (err, dcMatrixArray) {
