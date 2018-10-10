@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const linesHelper = require("../dbHelpers/lineHelper");
+const WbesHelper = require("../dbHelpers/wbesHelper");
 
 router.post('/', function (req, res, next) {
     var sourceName = 'webhook-line-info';
@@ -83,11 +84,11 @@ router.post('/', function (req, res, next) {
         var revNum = queryParams && queryParams.revision_number && queryParams.revision_number[0] ? queryParams.revision_number[0] : null;
         var statistic = queryParams && queryParams.statistic && queryParams.statistic[0] ? queryParams.statistic[0] : null;
         var dateStr = queryParams && queryParams.date && queryParams.date[0] ? queryParams.date[0] : null;
-        
+
         speechText = '';
-        
+
         // for testing purpose we are echoing the question parameters
-        var entitySpeeches = [];
+        /* var entitySpeeches = [];
         if (wbesEntity != null) {
             entitySpeeches.push(`entity is ${wbesEntity}`);
         }
@@ -112,13 +113,21 @@ router.post('/', function (req, res, next) {
         } else {
             speechText = 'Sorry I could not figure out any parameters from our query...';
         }
-
-        // todo use the wbes modules to get the values
-        // return the response
-        return res.json({
-            fulfillmentText: speechText,
-            source: sourceName
+        */
+        
+        WbesHelper.handleWbesQuery(queryParams, function (err, resObj) {
+            // return the response
+            if (err) {
+                speechText = 'Sorry, some error occured. Please try again...';
+            } else {
+                speechText = resObj['speechText'];
+            }
+            return res.json({
+                fulfillmentText: speechText,
+                source: sourceName
+            });
         });
+
     } else {
         if (intentName == 'line_info' && queryParams != null) {
             var unCapturedVars = [];

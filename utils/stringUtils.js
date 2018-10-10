@@ -27,6 +27,6 @@ module.exports.makeTwoDigits = function (x) {
         return "0" + x;
     }
     else {
-        return x;
+        return "" + x;
     }
 };
