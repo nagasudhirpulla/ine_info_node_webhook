@@ -5,7 +5,7 @@
 var CSVFetcher = require('./csvFetcher');
 var CSVToArray = require('./csvToArray');
 var StringUtils = require('./stringUtils');
-var ArrayHelper = require('../helpers/arrayHelpers');
+var ArrayHelper = require('./arrayHelpers');
 var Cookie = require('cookie');
 var async = require('async');
 
