@@ -8,6 +8,7 @@ const avgStatStr = 'maximum';
 const dcStr = 'dc';
 const scheduleStr = 'schedule';
 const availableUrsStr = 'available urs';
+var async = require('async');
 
 module.exports.handleWbesQuery = function (queryParams, callback) {
     var speechText = '';
