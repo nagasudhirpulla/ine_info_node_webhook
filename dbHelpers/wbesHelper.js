@@ -3,11 +3,12 @@ const Revision = require("../models/revision");
 const Schedule = require("../models/schedule");
 const StrUtils = require("../utils/stringUtils");
 const maxStatStr = 'maximum';
-const minStatStr = 'maximum';
-const avgStatStr = 'maximum';
+const minStatStr = 'minimum';
+const avgStatStr = 'average';
 const dcStr = 'dc';
 const scheduleStr = 'schedule';
 const availableUrsStr = 'available urs';
+var ArrayHelper = require('../utils/arrayHelpers');
 var async = require('async');
 
 module.exports.handleWbesQuery = function (queryParams, callback) {
@@ -125,7 +126,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
     } else {
         speechText = 'Sorry, we could not figure out the wbes entity from your query, please try again...';
         return callback(null, { 'speechText': speechText });
-    }    
+    }
 };
 
 function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statistic, blockNum) {
@@ -138,13 +139,7 @@ function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statis
         speechText = `${wbesEntity} ${wbesMetric} minimum value is ${minVal}. Please ask for another information...`;
     }
     else if (statistic == avgStatStr) {
-        var avgVal = 0;
-        for (let iter = 0; iter < blkVals.length; iter++) {
-            const val = blkVals[iter];
-            avgVal = avgVal + val;
-        }
-        avgVal = avgVal / blkVals.length;
-        avgVal = avgVal.toFixed(0);
+        var avgVal = ArrayHelper.getAvgVal(blkVals);
         speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal}. Please ask for another information...`;
     }
     else if (blockNum != null) {
@@ -158,7 +153,7 @@ function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statis
         // give all stat information
         maxVal = Math.max(...blkVals);
         minVal = Math.min(...blkVals);
-        avgVal = blkVals.reduce((a, b) => a + b, 0) / blkVals.length;
+        avgVal = ArrayHelper.getAvgVal(blkVals);
         speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal}, max value is ${maxVal}, minimum value is ${minVal}. Please ask for another information...`;
     }
     return speechText;

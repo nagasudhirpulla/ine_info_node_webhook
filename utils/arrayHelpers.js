@@ -5,8 +5,8 @@
 // pre: a !== b, each item is a scalar
 var array_equals = function (a, b) {
     return a.length === b.length && a.every(function (value, index) {
-            return value === b[index];
-        });
+        return value === b[index];
+    });
 };
 
 // https://stackoverflow.com/questions/13814621/how-can-i-get-the-dimensions-of-a-multidimensional-javascript-array
@@ -71,4 +71,15 @@ var getAllIndexesOfVal = module.exports.getAllIndexesOfVal = function (arr, val,
     }
 
     return indexes;
+};
+
+var getAvgVal = module.exports.getAvgVal = function (blkVals) {
+    var avgVal = 0;
+    for (let iter = 0; iter < blkVals.length; iter++) {
+        const val = blkVals[iter];
+        avgVal = avgVal + val;
+    }
+    avgVal = avgVal / blkVals.length;
+    avgVal = avgVal.toFixed(0);
+    return avgVal;
 };
