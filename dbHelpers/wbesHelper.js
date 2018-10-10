@@ -131,19 +131,19 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
 function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statistic, blockNum) {
     if (statistic == maxStatStr) {
         var maxVal = Math.max(...blkVals);
-        var speechText = `${wbesEntity} ${statistic} max value is ${maxVal}. Please ask for another information...`;
+        var speechText = `${wbesEntity} ${wbesMetric} max value is ${maxVal}. Please ask for another information...`;
     }
     else if (statistic == minStatStr) {
         var minVal = Math.min(...blkVals);
-        speechText = `${wbesEntity} ${statistic} minimum value is ${minVal}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} minimum value is ${minVal}. Please ask for another information...`;
     }
     else if (statistic == avgStatStr) {
         var avgVal = blkVals.reduce((a, b) => a + b, 0) / blkVals.length;
-        speechText = `${wbesEntity} ${statistic} average value is ${avgVal}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal}. Please ask for another information...`;
     }
     else if (blockNum != null) {
         if (blockNum > 0 && blockNum < 97) {
-            speechText = `${wbesEntity} ${statistic} value at block ${blockNum} is ${blkVals[blockNum - 1]}. Please ask for another information...`;
+            speechText = `${wbesEntity} ${wbesMetric} value at block ${blockNum} is ${blkVals[blockNum - 1]}. Please ask for another information...`;
         } else {
             speechText = `The block number should be in between 1 and 96. Please ask for another information...`;
         }
@@ -153,8 +153,7 @@ function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statis
         maxVal = Math.max(...blkVals);
         minVal = Math.min(...blkVals);
         avgVal = blkVals.reduce((a, b) => a + b, 0) / blkVals.length;
-        speechText = `${wbesEntity} ${statistic} average value is ${avgVal}, max value is ${maxVal}, minimum value is ${minVal}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal}, max value is ${maxVal}, minimum value is ${minVal}. Please ask for another information...`;
     }
-
     return speechText;
 }
