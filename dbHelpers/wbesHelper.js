@@ -25,7 +25,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
             // we have entity and metric
             // Resolve the utility 
             var utilId = UtilIds.utilIds[wbesEntity];
-            if (utilId == null) {
+            if (utilId == undefined || utilId == null) {
                 return callback({ 'message': 'Could not figure out the wbes utility.' });
             }
             // Resolve the date
