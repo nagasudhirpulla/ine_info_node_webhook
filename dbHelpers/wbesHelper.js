@@ -7,7 +7,12 @@ const minStatStr = 'minimum';
 const avgStatStr = 'average';
 const dcStr = 'dc';
 const scheduleStr = 'schedule';
-const availableUrsStr = 'available urs';
+const ursStr = 'urs';
+const rrasStr = 'rras';
+const stoaStr = 'rras';
+const ltaStr = 'rras';
+const mtoaStr = 'rras';
+const marginStr = 'margin';
 var ArrayHelper = require('../utils/arrayHelpers');
 var async = require('async');
 
@@ -85,7 +90,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                         return callback(null, { 'speechText': speechText });
                     });
                 }
-                else if (wbesMetric == scheduleStr) {
+                else if ([scheduleStr, ursStr, rrasStr, stoaStr, ltaStr, mtoaStr].indexOf(wbesMetric) > -1) {
                     const isSeller = true;
                     Schedule.getIsgsNetSchObj(utilId, paramDateStr, resolvedRev, isSeller, function (err, netSchMatrixObj) {
                         if (err) {
@@ -104,7 +109,21 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             var genNames = netSchMatrixObj["gen_names"];
                             //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                             //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
-                            var schVal = (+netSchMatrixObj[genNames[0]]['total'][blk - 1]).toFixed(0);
+                            if (wbesMetric == scheduleStr) {
+                                var schVal = (+netSchMatrixObj[genNames[0]]['total'][blk - 1]).toFixed(0);
+                            } else if (wbesMetric == ursStr) {
+                                var schVal = (+netSchMatrixObj[genNames[0]]['urs'][blk - 1]).toFixed(0);
+                            } else if (wbesMetric == rrasStr) {
+                                var schVal = (+netSchMatrixObj[genNames[0]]['rras'][blk - 1]).toFixed(0);
+                            } else if (wbesMetric == stoaStr) {
+                                var schVal = (+netSchMatrixObj[genNames[0]]['stoa'][blk - 1]).toFixed(0);
+                            } else if (wbesMetric == ltaStr) {
+                                var schVal = (+netSchMatrixObj[genNames[0]]['lta'][blk - 1]).toFixed(0);
+                            } else if (wbesMetric == mtoaStr) {
+                                var schVal = (+netSchMatrixObj[genNames[0]]['mtoa'][blk - 1]).toFixed(0);
+                            } else {
+                                var schVal = 0;
+                            }
                             schVals.push(schVal);
                         }
                         speechText = getStatisticSpeechFromBlockVals(schVals, wbesEntity, wbesMetric, statistic, blockNum);
@@ -117,7 +136,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                 if (err) {
                     return callback(err);
                 }
-                //todo synthesise the speech text
+                //synthesise the speech text
                 return callback(null, { 'speechText': resObj['speechText'] });
             });
         } else {
