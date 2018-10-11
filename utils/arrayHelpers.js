@@ -76,7 +76,7 @@ var getAllIndexesOfVal = module.exports.getAllIndexesOfVal = function (arr, val,
 var getAvgVal = module.exports.getAvgVal = function (blkVals) {
     var avgVal = 0;
     for (let iter = 0; iter < blkVals.length; iter++) {
-        const val = Number(blkVals[iter]);
+        const val = +blkVals[iter];
         avgVal = avgVal + val;
     }
     avgVal = avgVal / blkVals.length;
