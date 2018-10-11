@@ -86,7 +86,8 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                     });
                 }
                 else if (wbesMetric == scheduleStr) {
-                    Schedule.getIsgsNetSchObj(utilId, paramDateStr, resolvedRev, false, function (err, netSchMatrixObj) {
+                    const isSeller = true;
+                    Schedule.getIsgsNetSchObj(utilId, paramDateStr, resolvedRev, isSeller, function (err, netSchMatrixObj) {
                         if (err) {
                             return callback(err);
                         }
