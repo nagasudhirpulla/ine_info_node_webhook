@@ -110,17 +110,17 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                             //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
                             if (wbesMetric == scheduleStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['total'][blk - 1]).toFixed(0);
+                                var schVal = (+netSchMatrixObj[genNames[0]]['total'][blk - 1]);
                             } else if (wbesMetric == ursStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['urs'][blk - 1]).toFixed(0);
+                                var schVal = (+netSchMatrixObj[genNames[0]]['urs'][blk - 1]);
                             } else if (wbesMetric == rrasStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['rras'][blk - 1]).toFixed(0);
+                                var schVal = (+netSchMatrixObj[genNames[0]]['rras'][blk - 1]);
                             } else if (wbesMetric == stoaStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['stoa'][blk - 1]).toFixed(0);
+                                var schVal = (+netSchMatrixObj[genNames[0]]['stoa'][blk - 1]);
                             } else if (wbesMetric == ltaStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['lta'][blk - 1]).toFixed(0);
+                                var schVal = (+netSchMatrixObj[genNames[0]]['lta'][blk - 1]);
                             } else if (wbesMetric == mtoaStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['mtoa'][blk - 1]).toFixed(0);
+                                var schVal = (+netSchMatrixObj[genNames[0]]['mtoa'][blk - 1]);
                             } else {
                                 var schVal = 0;
                             }
@@ -161,15 +161,15 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
 function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statistic, blockNum) {
     if (statistic == maxStatStr) {
         var maxVal = Math.max(...blkVals);
-        var speechText = `${wbesEntity} ${wbesMetric} max value is ${maxVal}. Please ask for another information...`;
+        var speechText = `${wbesEntity} ${wbesMetric} max value is ${maxVal.toFixed(0)}. Please ask for another information...`;
     }
     else if (statistic == minStatStr) {
         var minVal = Math.min(...blkVals);
-        speechText = `${wbesEntity} ${wbesMetric} minimum value is ${minVal}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} minimum value is ${minVal.toFixed(0)}. Please ask for another information...`;
     }
     else if (statistic == avgStatStr) {
         var avgVal = ArrayHelper.getAvgVal(blkVals);
-        speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal.toFixed(0)}. Please ask for another information...`;
     }
     else if (blockNum != null) {
         if (blockNum > 0 && blockNum < 97) {
@@ -183,7 +183,7 @@ function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statis
         maxVal = Math.max(...blkVals);
         minVal = Math.min(...blkVals);
         avgVal = ArrayHelper.getAvgVal(blkVals);
-        speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal}, max value is ${maxVal}, minimum value is ${minVal}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} average value is ${avgVal.toFixed(0)}, max value is ${maxVal.toFixed(0)}, minimum value is ${minVal.toFixed(0)}. Please ask for another information...`;
     }
     return speechText;
 }
