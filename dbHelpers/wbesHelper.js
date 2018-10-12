@@ -161,19 +161,19 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
 function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statistic, blockNum) {
     if (statistic == maxStatStr) {
         var maxVal = Math.max(...blkVals);
-        var speechText = `${wbesEntity} ${wbesMetric} max value is ${+maxVal.toFixed(0)}. Please ask for another information...`;
+        var speechText = `${wbesEntity} ${wbesMetric} max value is ${(+maxVal).toFixed(0)}. Please ask for another information...`;
     }
     else if (statistic == minStatStr) {
         var minVal = Math.min(...blkVals);
-        speechText = `${wbesEntity} ${wbesMetric} minimum value is ${+minVal.toFixed(0)}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} minimum value is ${(+minVal).toFixed(0)}. Please ask for another information...`;
     }
     else if (statistic == avgStatStr) {
         var avgVal = ArrayHelper.getAvgVal(blkVals);
-        speechText = `${wbesEntity} ${wbesMetric} average value is ${+avgVal.toFixed(0)}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} average value is ${(+avgVal).toFixed(0)}. Please ask for another information...`;
     }
     else if (blockNum != null) {
         if (blockNum > 0 && blockNum < 97) {
-            speechText = `${wbesEntity} ${wbesMetric} value at block ${blockNum} is ${+blkVals[blockNum - 1].toFixed(0)}. Please ask for another information...`;
+            speechText = `${wbesEntity} ${wbesMetric} value at block ${blockNum} is ${(+blkVals[blockNum - 1]).toFixed(0)}. Please ask for another information...`;
         } else {
             speechText = `The block number should be in between 1 and 96. Please ask for another information...`;
         }
@@ -183,7 +183,7 @@ function getStatisticSpeechFromBlockVals(blkVals, wbesEntity, wbesMetric, statis
         maxVal = Math.max(...blkVals);
         minVal = Math.min(...blkVals);
         avgVal = ArrayHelper.getAvgVal(blkVals);
-        speechText = `${wbesEntity} ${wbesMetric} average value is ${+avgVal.toFixed(0)}, max value is ${+maxVal.toFixed(0)}, minimum value is ${+minVal.toFixed(0)}. Please ask for another information...`;
+        speechText = `${wbesEntity} ${wbesMetric} average value is ${(+avgVal).toFixed(0)}, max value is ${(+maxVal).toFixed(0)}, minimum value is ${(+minVal).toFixed(0)}. Please ask for another information...`;
     }
     return speechText;
 }
