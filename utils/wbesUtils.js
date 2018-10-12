@@ -59,7 +59,7 @@ var getStartEndBlks = module.exports.getStartEndBlks = function (fromBlk, toBlk)
         startBlk = 1;
         endBlk = 96;
     }
-    return {startBlk: startBlk, endBlk: endBlk};
+    return { startBlk: startBlk, endBlk: endBlk };
 };
 
 var fetchCookiesFromReportsUrl = module.exports.fetchCookiesFromReportsUrl = function (callback) {
@@ -371,7 +371,7 @@ var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (uti
             if (err) {
                 return callback(err);
             }
-            return callback(null, {'entitlementsMatrix': utilEntsArray});
+            return callback(null, { 'entitlementsMatrix': utilEntsArray });
         });
     };
 
@@ -416,7 +416,7 @@ var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (uti
         // console.log(entTypeSearchStr + "  " + reqTypeSearchStr);
 
         // initialize the surrendersObj
-        var surrendersObj = {utilNames: [], reqType: reqTypeSearchStr, blks: []};
+        var surrendersObj = { utilNames: [], reqType: reqTypeSearchStr, blks: [] };
         for (var i = 0; i < genNames.length; i++) {
             var genName = genNames[i].trim();
             var entMatrixGenIndices = ArrayHelper.getAllIndexesOfVal(entsFirstRow, genName, true);
@@ -464,14 +464,14 @@ var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (uti
                 var ent = Number(entsMatrix[blkIndex][desiredEntCol]);
                 if (ent - req > epsilon) {
                     surrenderBlks.push(blk);
-                    surrReqArray.push({blk: blk, req: req, ent: ent})
+                    surrReqArray.push({ blk: blk, req: req, ent: ent })
                 }
             }
 
             if (surrenderBlks.length > 0) {
                 // there is surrender in this generator
                 surrendersObj.utilNames.push(genName);
-                surrendersObj.blks.push({utilName: genName, values: surrReqArray});
+                surrendersObj.blks.push({ utilName: genName, values: surrReqArray });
             }
 
         }
@@ -481,7 +481,7 @@ var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (uti
 
 // get ISGS declarations for a date, rev, utilId
 var getISGSDeclarationsArray = module.exports.getISGSDeclarationsArray = function (date_str, rev, utilId, callback) {
-// fetch cookie first and then do request
+    // fetch cookie first and then do request
     async.waterfall([
         function (callback) {
             fetchCookiesFromReportsUrl(function (err, cookieObj) {
@@ -540,7 +540,7 @@ var getISGSDeclarationsArray = module.exports.getISGSDeclarationsArray = functio
 
 // get ISGS URS Availed for a date, rev, utilId
 var getISGSURSAvailedArray = module.exports.getISGSURSAvailedArray = function (date_str, rev, utilId, callback) {
-// fetch cookie first and then do request
+    // fetch cookie first and then do request
     async.waterfall([
         function (callback) {
             fetchCookiesFromReportsUrl(function (err, cookieObj) {

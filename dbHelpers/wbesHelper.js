@@ -129,6 +129,15 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                         speechText = getStatisticSpeechFromBlockVals(schVals, wbesEntity, wbesMetric, statistic, blockNum);
                         return callback(null, { 'speechText': speechText });
                     });
+                } else if (wbesMetric == marginStr) {
+                    Schedule.getIsgsMarginsObj(utilId, paramDateStr, resolvedRev, function (err, marginsObj) {
+                        if (err) {
+                            return callback(err);
+                        }
+                        var marginVals = marginsObj['margins'];
+                        speechText = getStatisticSpeechFromBlockVals(marginVals, wbesEntity, wbesMetric, statistic, blockNum);
+                        return callback(null, { 'speechText': speechText });
+                    });
                 }
             };
             var tasksArray = [getDayRevisions, resolveRev, getWbesData];

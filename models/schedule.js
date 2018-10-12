@@ -3,6 +3,7 @@
  */
 var WBESUtils = require("../utils/wbesUtils");
 var ArrayHelper = require('../utils/arrayHelpers');
+var async = require('async');
 
 var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId, callback) {
     WBESUtils.getISGSDeclarationsArray(dateStr, rev, utilId, function (err, dcMatrixArray) {
@@ -11,8 +12,8 @@ var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId,
             return;
         }
         var dcMatrixDim = ArrayHelper.getDim(dcMatrixArray);
-        if (dcMatrixDim.length < 2 || dcMatrixDim[0] < 98 || dcMatrixDim[1] < 6) {
-            callback(new Error('DC matrix is not of minimum required shape of 98*6'));
+        if (dcMatrixDim.length < 2 || dcMatrixDim[0] < 98 || dcMatrixDim[1] < 5) {
+            callback(new Error('DC matrix is not of minimum required shape of 98*5'));
             return;
         }
 
@@ -57,8 +58,8 @@ var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId,
             } else {
                 dcType = dcType.trim().toLowerCase();
             }
-            var dcTypeStrDict = { 'sellerdc': 'total_dc', 'dc':'on_bar_dc', 'combineddc':'on_bar_dc', 'onbardc': 'on_bar_dc', 'offbardc': 'off_bar_dc', 'total': 'total_dc' };
-            if (['onbardc', 'offbardc', 'total', 'combineddc','dc', 'sellerdc'].indexOf(dcType) > -1) {
+            var dcTypeStrDict = { 'sellerdc': 'total_dc', 'dc': 'on_bar_dc', 'combineddc': 'on_bar_dc', 'onbardc': 'on_bar_dc', 'offbardc': 'off_bar_dc', 'total': 'total_dc' };
+            if (['onbardc', 'offbardc', 'total', 'combineddc', 'dc', 'sellerdc'].indexOf(dcType) > -1) {
                 // fill the dc values in the appropriate object array
                 var dcValsList = [];
                 for (var matrixRow = 2; matrixRow < Math.min(dcMatrixArray.length, 98); matrixRow++) {
@@ -197,5 +198,62 @@ var getISGSURSAvailedObj = module.exports.getISGSURSAvailedObj = function (dateS
         };
         URSAvailedInfoArray.sort(compareFunc);
         return callback(null, URSAvailedInfoArray);
+    });
+};
+
+var getIsgsMarginsObj = module.exports.getIsgsMarginsObj = function (utilId, date_str, rev, callback) {
+    var getDCArray = function (callback) {
+        getIsgsDcObj(date_str, rev, utilId, function (err, dcArray) {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, { 'dcObj': dcArray });
+        });
+    };
+
+    var getUtilNetSchArray = function (resObj, callback) {
+        getIsgsNetSchObj(utilId, date_str, rev, true, function (err, schArray) {
+            if (err) {
+                return callback(err);
+            }
+            resObj['schObj'] = schArray;
+            return callback(null, resObj);
+        });
+    };
+
+    var computeMargins = function (resObj, callback) {
+        const genName = resObj['schObj']['gen_names'][0];
+        //console.log(genName);
+        const genNameDC = resObj['dcObj']['gen_names'][0];
+        //console.log(genNameDC);
+        const onBarVals = resObj['dcObj'][genName]['on_bar_dc'];
+        const schVals = resObj['schObj'][genName]['total'];
+        if (onBarVals == undefined || onBarVals.constructor.name != "Array" || schVals == undefined || schVals.constructor.name != "Array") {
+            // arrays not returned so throw an error
+            return callback(new Error('Undesired api result found'));
+        }
+        if (onBarVals.length != schVals.length) {
+            //check if dc and schedule array are of same length
+            return callback(new Error('schedule and dc arrays are not of same length'));
+        }
+
+        // now compute margin values
+        const marginVals = [];
+        for (let iter = 0; iter < onBarVals.length; iter++) {
+            const dcVal = onBarVals[iter];
+            const schVal = schVals[iter];
+            marginVals.push(+dcVal - +schVal);
+        }
+        return callback(null, { 'margins': marginVals });
+    }
+
+    var tasksArray = [getDCArray, getUtilNetSchArray, computeMargins];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            //console.log(err);
+            return callback(err);
+        }
+        //console.log(resObj);
+        return callback(null, resObj);
     });
 };
