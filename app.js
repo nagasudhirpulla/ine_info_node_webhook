@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 app.use(express.json());
 
-app.use("/line_info",require('./controllers/lineController'));
+app.use("/line_info", require('./controllers/lineController'));
 
 app.post("/echo", function (req, res) {
     var speechText =
@@ -44,6 +44,14 @@ app.post("/echo", function (req, res) {
 app.get("/", function (req, res) {
     return res.json({
         fulfillmentText: "This is a text response",
+        source: "webhook-line-info"
+    });
+});
+
+app.use(function (err, req, res, next) {
+    console.log(err);
+    return res.json({
+        fulfillmentText: "Sorry, some internal error occured, please try again...",
         source: "webhook-line-info"
     });
 });

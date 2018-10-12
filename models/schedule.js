@@ -226,7 +226,7 @@ var getIsgsMarginsObj = module.exports.getIsgsMarginsObj = function (utilId, dat
         //console.log(genName);
         const genNameDC = resObj['dcObj']['gen_names'][0];
         //console.log(genNameDC);
-        const onBarVals = resObj['dcObj'][genName]['on_bar_dc'];
+        const onBarVals = resObj['dcObj'][genNameDC]['on_bar_dc'];
         const schVals = resObj['schObj'][genName]['total'];
         if (onBarVals == undefined || onBarVals.constructor.name != "Array" || schVals == undefined || schVals.constructor.name != "Array") {
             // arrays not returned so throw an error
