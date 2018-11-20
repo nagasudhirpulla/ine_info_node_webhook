@@ -86,12 +86,12 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             // iterarate through each generator
                             for (let iter = 0; iter < numGenIter; iter++) {
                                 if (iter == 0) {
-                                    dcVals[i] = 0
+                                    dcVals[blk-1] = 0
                                 }
                                 //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                                 //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
                                 var totDCVal = (+dcMatrixObj[genNames[iter]]['total_dc'][blk - 1]).toFixed(0);
-                                dcVals[i] += totDCVal;
+                                dcVals[blk-1] += totDCVal;
                             }
                         }
                         var speechText = getStatisticSpeechFromBlockVals(dcVals, wbesEntity, wbesMetric, statistic, blockNum);
@@ -109,6 +109,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             return callback(null, { 'speechText': speechText });
                         }
                         var schVals = [];
+                        var genNames = netSchMatrixObj["gen_names"];
                         var numGenIter = (utilId == "ALL")? genNames.length : 1;
                         for (let iter = 0; iter < numGenIter; iter++) {
                             for (var i = 0; i < netSchMatrixObj["time_blocks"].length; i++) {
@@ -116,7 +117,6 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                                 if (blk < 1 || blk > 96) {
                                     continue;
                                 }
-                                var genNames = netSchMatrixObj["gen_names"];
                                 //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                                 //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
                                 if (wbesMetric == scheduleStr) {
