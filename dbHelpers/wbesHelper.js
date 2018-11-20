@@ -91,7 +91,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                                 //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                                 //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
                                 var totDCVal = (+dcMatrixObj[genNames[iter]]['total_dc'][blk - 1]).toFixed(0);
-                                if ((totDCVal != undefined) && (totDCVal != NaN)) {
+                                if ((totDCVal != undefined) && !isNaN(totDCVal)) {
                                     dcVals[blk - 1] = dcVals[blk - 1] + totDCVal;
                                 }
                             }
