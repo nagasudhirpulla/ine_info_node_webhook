@@ -76,7 +76,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                         }
                         var dcVals = [];
                         var genNames = dcMatrixObj["gen_names"];
-                        var numGenIter = (utilId == "ALL")? genNames.length : 1;
+                        var numGenIter = (utilId == "ALL") ? genNames.length : 1;
 
                         for (var i = 0; i < dcMatrixObj["time_blocks"].length; i++) {
                             var blk = +dcMatrixObj["time_blocks"][i];
@@ -86,12 +86,14 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             // iterarate through each generator
                             for (let iter = 0; iter < numGenIter; iter++) {
                                 if (iter == 0) {
-                                    dcVals[blk-1] = 0
+                                    dcVals[blk - 1] = 0
                                 }
                                 //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
                                 //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
                                 var totDCVal = (+dcMatrixObj[genNames[iter]]['total_dc'][blk - 1]).toFixed(0);
-                                dcVals[blk-1] += totDCVal;
+                                if (totDCVal != undefined && totDCVal != NaN) {
+                                    dcVals[blk - 1] += totDCVal;
+                                }
                             }
                         }
                         var speechText = getStatisticSpeechFromBlockVals(dcVals, wbesEntity, wbesMetric, statistic, blockNum);
@@ -110,7 +112,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                         }
                         var schVals = [];
                         var genNames = netSchMatrixObj["gen_names"];
-                        var numGenIter = (utilId == "ALL")? genNames.length : 1;
+                        var numGenIter = (utilId == "ALL") ? genNames.length : 1;
                         for (let iter = 0; iter < numGenIter; iter++) {
                             for (var i = 0; i < netSchMatrixObj["time_blocks"].length; i++) {
                                 var blk = +netSchMatrixObj["time_blocks"][i];
