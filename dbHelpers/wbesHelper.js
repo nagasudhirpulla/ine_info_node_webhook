@@ -76,7 +76,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                         }
                         var dcVals = [];
                         var genNames = dcMatrixObj["gen_names"];
-                        let numGenIter = (utilId == "ALL")? genNames.length : 1;
+                        var numGenIter = (utilId == "ALL")? genNames.length : 1;
 
                         for (var i = 0; i < dcMatrixObj["time_blocks"].length; i++) {
                             var blk = +dcMatrixObj["time_blocks"][i];
@@ -109,7 +109,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             return callback(null, { 'speechText': speechText });
                         }
                         var schVals = [];
-                        let numGenIter = (utilId == "ALL")? genNames.length : 1;
+                        var numGenIter = (utilId == "ALL")? genNames.length : 1;
                         for (let iter = 0; iter < numGenIter; iter++) {
                             for (var i = 0; i < netSchMatrixObj["time_blocks"].length; i++) {
                                 var blk = +netSchMatrixObj["time_blocks"][i];

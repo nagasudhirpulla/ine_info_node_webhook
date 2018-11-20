@@ -231,8 +231,8 @@ var getIsgsMarginsObj = module.exports.getIsgsMarginsObj = function (utilId, dat
             //console.log(genName);
             const genNameDC = resObj['dcObj']['gen_names'][genIter];
             //console.log(genNameDC);
-            let onBarValsTemp = resObj['dcObj'][genNameDC]['on_bar_dc'];
-            let schValsTemp = resObj['schObj'][genName]['total'];
+            var onBarValsTemp = resObj['dcObj'][genNameDC]['on_bar_dc'];
+            var schValsTemp = resObj['schObj'][genName]['total'];
             if (onBarValsTemp == undefined || onBarValsTemp.constructor.name != "Array" || schValsTemp == undefined || schValsTemp.constructor.name != "Array") {
                 // arrays not returned so throw an error
                 return callback(new Error('Undesired api result found'));
