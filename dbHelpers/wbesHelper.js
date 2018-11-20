@@ -75,16 +75,24 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             return callback(null, { 'speechText': speechText });
                         }
                         var dcVals = [];
+                        var genNames = dcMatrixObj["gen_names"];
+                        let numGenIter = (utilId == "ALL")? genNames.length : 1;
+
                         for (var i = 0; i < dcMatrixObj["time_blocks"].length; i++) {
                             var blk = +dcMatrixObj["time_blocks"][i];
                             if (blk < 1 || blk > 96) {
                                 continue;
                             }
-                            var genNames = dcMatrixObj["gen_names"];
-                            //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
-                            //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
-                            var totDCVal = (+dcMatrixObj[genNames[0]]['total_dc'][blk - 1]).toFixed(0);
-                            dcVals.push(totDCVal);
+                            // iterarate through each generator
+                            for (let iter = 0; iter < numGenIter; iter++) {
+                                if (iter == 0) {
+                                    dcVals[i] = 0
+                                }
+                                //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
+                                //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
+                                var totDCVal = (+dcMatrixObj[genNames[iter]]['total_dc'][blk - 1]).toFixed(0);
+                                dcVals[i] += totDCVal;
+                            }
                         }
                         var speechText = getStatisticSpeechFromBlockVals(dcVals, wbesEntity, wbesMetric, statistic, blockNum);
                         return callback(null, { 'speechText': speechText });
@@ -101,30 +109,36 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             return callback(null, { 'speechText': speechText });
                         }
                         var schVals = [];
-                        for (var i = 0; i < netSchMatrixObj["time_blocks"].length; i++) {
-                            var blk = +netSchMatrixObj["time_blocks"][i];
-                            if (blk < 1 || blk > 96) {
-                                continue;
+                        let numGenIter = (utilId == "ALL")? genNames.length : 1;
+                        for (let iter = 0; iter < numGenIter; iter++) {
+                            for (var i = 0; i < netSchMatrixObj["time_blocks"].length; i++) {
+                                var blk = +netSchMatrixObj["time_blocks"][i];
+                                if (blk < 1 || blk > 96) {
+                                    continue;
+                                }
+                                var genNames = netSchMatrixObj["gen_names"];
+                                //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
+                                //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
+                                if (wbesMetric == scheduleStr) {
+                                    var schVal = (+netSchMatrixObj[genNames[iter]]['total'][blk - 1]);
+                                } else if (wbesMetric == ursStr) {
+                                    var schVal = (+netSchMatrixObj[genNames[iter]]['urs'][blk - 1]);
+                                } else if (wbesMetric == rrasStr) {
+                                    var schVal = (+netSchMatrixObj[genNames[iter]]['rras'][blk - 1]);
+                                } else if (wbesMetric == stoaStr) {
+                                    var schVal = (+netSchMatrixObj[genNames[iter]]['stoa'][blk - 1]);
+                                } else if (wbesMetric == ltaStr) {
+                                    var schVal = (+netSchMatrixObj[genNames[iter]]['lta'][blk - 1]);
+                                } else if (wbesMetric == mtoaStr) {
+                                    var schVal = (+netSchMatrixObj[genNames[iter]]['mtoa'][blk - 1]);
+                                } else {
+                                    var schVal = 0;
+                                }
+                                if (iter == 0) {
+                                    schVals[i] = 0;
+                                }
+                                schVals[i] = schVals[i] + schVal;
                             }
-                            var genNames = netSchMatrixObj["gen_names"];
-                            //var onBarDCVal = (+dcMatrixObj[genNames[0]]['on_bar_dc'][blk - 1]).toFixed(0);
-                            //var offBarDCVal = (+dcMatrixObj[genNames[0]]['off_bar_dc'][blk - 1]).toFixed(0);
-                            if (wbesMetric == scheduleStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['total'][blk - 1]);
-                            } else if (wbesMetric == ursStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['urs'][blk - 1]);
-                            } else if (wbesMetric == rrasStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['rras'][blk - 1]);
-                            } else if (wbesMetric == stoaStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['stoa'][blk - 1]);
-                            } else if (wbesMetric == ltaStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['lta'][blk - 1]);
-                            } else if (wbesMetric == mtoaStr) {
-                                var schVal = (+netSchMatrixObj[genNames[0]]['mtoa'][blk - 1]);
-                            } else {
-                                var schVal = 0;
-                            }
-                            schVals.push(schVal);
                         }
                         speechText = getStatisticSpeechFromBlockVals(schVals, wbesEntity, wbesMetric, statistic, blockNum);
                         return callback(null, { 'speechText': speechText });

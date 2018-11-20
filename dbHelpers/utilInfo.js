@@ -27,4 +27,5 @@ module.exports.utilIds = {"CGPL":"6477e23c-660e-4587-92d2-8e3488bc8262",
 "VSTPS II":"3eef8b04-71dc-4f6b-bdfc-dabd76aeaf1e",
 "VSTPS III":"1546576d-d5e3-4223-9472-804cfca84918",
 "VSTPS IV":"489fe396-7c38-4ce8-aeb5-927e2749c83a",
-"VSTPS V":"5df201ba-1574-475a-ad25-b26533170943"}
+"VSTPS V":"5df201ba-1574-475a-ad25-b26533170943",
+"WR":"ALL"}

@@ -222,19 +222,36 @@ var getIsgsMarginsObj = module.exports.getIsgsMarginsObj = function (utilId, dat
     };
 
     var computeMargins = function (resObj, callback) {
-        const genName = resObj['schObj']['gen_names'][0];
-        //console.log(genName);
-        const genNameDC = resObj['dcObj']['gen_names'][0];
-        //console.log(genNameDC);
-        const onBarVals = resObj['dcObj'][genNameDC]['on_bar_dc'];
-        const schVals = resObj['schObj'][genName]['total'];
-        if (onBarVals == undefined || onBarVals.constructor.name != "Array" || schVals == undefined || schVals.constructor.name != "Array") {
-            // arrays not returned so throw an error
-            return callback(new Error('Undesired api result found'));
-        }
-        if (onBarVals.length != schVals.length) {
-            //check if dc and schedule array are of same length
-            return callback(new Error('schedule and dc arrays are not of same length'));
+        const onBarVals = [];
+        const schVals = [];
+        const numGensToIter = (utilId == 'ALL') ? resObj['dcObj']['gen_names'].length : 1;
+        // if utilId is ALL then compute margin for all generators
+        for (let genIter = 0; genIter < numGensToIter; genIter++) {
+            const genName = resObj['schObj']['gen_names'][genIter];
+            //console.log(genName);
+            const genNameDC = resObj['dcObj']['gen_names'][genIter];
+            //console.log(genNameDC);
+            let onBarValsTemp = resObj['dcObj'][genNameDC]['on_bar_dc'];
+            let schValsTemp = resObj['schObj'][genName]['total'];
+            if (onBarValsTemp == undefined || onBarValsTemp.constructor.name != "Array" || schValsTemp == undefined || schValsTemp.constructor.name != "Array") {
+                // arrays not returned so throw an error
+                return callback(new Error('Undesired api result found'));
+            }
+            if (onBarValsTemp.length != schValsTemp.length) {
+                //check if dc and schedule array are of same length
+                return callback(new Error('schedule and dc arrays are not of same length'));
+            }
+            if (genIter == 0) {
+                // initialize the onbar and schedule arrays to zero for first generator
+                for (let iter = 0; iter < onbarValsTemp.length; iter++) {
+                    onBarVals[iter] = 0;
+                    schVals[iter] = 0;
+                }
+            }
+            for (let iter = 0; iter < onBarValsTemp.length; iter++) {
+                onBarVals[iter] = onBarVals[iter] + onBarValsTemp[iter];
+                schVals[iter] = schVals[iter] + schValsTemp[iter];
+            }
         }
 
         // now compute margin values
