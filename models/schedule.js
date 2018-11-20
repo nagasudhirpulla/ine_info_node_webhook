@@ -249,17 +249,19 @@ var getIsgsMarginsObj = module.exports.getIsgsMarginsObj = function (utilId, dat
                 }
             }
             for (let iter = 0; iter < onBarValsTemp.length; iter++) {
-                onBarVals[iter] = onBarVals[iter] + onBarValsTemp[iter];
-                schVals[iter] = schVals[iter] + schValsTemp[iter];
+                onBarVals[iter] += +onBarValsTemp[iter];
+                schVals[iter] += +schValsTemp[iter];
             }
         }
 
         // now compute margin values
         const marginVals = [];
         for (let iter = 0; iter < onBarVals.length; iter++) {
-            const dcVal = onBarVals[iter];
-            const schVal = schVals[iter];
-            marginVals.push(+dcVal - +schVal);
+            let dcVal = onBarVals[iter];
+            let schVal = schVals[iter];
+            let marginVal = +dcVal - +schVal;
+            marginVal = (marginVal < 0) ? 0 : marginVal;
+            marginVals.push(marginVal);
         }
         return callback(null, { 'margins': marginVals });
     }
