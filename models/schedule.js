@@ -243,7 +243,7 @@ var getIsgsMarginsObj = module.exports.getIsgsMarginsObj = function (utilId, dat
             }
             if (genIter == 0) {
                 // initialize the onbar and schedule arrays to zero for first generator
-                for (let iter = 0; iter < onbarValsTemp.length; iter++) {
+                for (let iter = 0; iter < onBarValsTemp.length; iter++) {
                     onBarVals[iter] = 0;
                     schVals[iter] = 0;
                 }
