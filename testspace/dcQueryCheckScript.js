@@ -1,8 +1,8 @@
 var wbesHelper = require('../dbHelpers/wbesHelper');
 
 var queryParams = {
-    wbes_entity: ["WR"],
-    wbes_metric : ["margin"]
+    wbes_entity: ["CGPL"],
+    wbes_metric : ["schedule"]
 };
 
 wbesHelper.handleWbesQuery(queryParams, function (err, res) {

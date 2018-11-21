@@ -100,7 +100,7 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                         return callback(null, { 'speechText': speechText });
                     });
                 }
-                else if ([scheduleStr, ursStr, rrasStr, stoaStr, ltaStr, mtoaStr].indexOf(wbesMetric) > -1) {
+                else if ([ursStr, rrasStr, stoaStr, ltaStr, mtoaStr].indexOf(wbesMetric) > -1) {
                     const isSeller = true;
                     Schedule.getIsgsNetSchObj(utilId, paramDateStr, resolvedRev, isSeller, function (err, netSchMatrixObj) {
                         if (err) {
@@ -146,12 +146,21 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                         return callback(null, { 'speechText': speechText });
                     });
                 } else if (wbesMetric == marginStr) {
-                    Schedule.getIsgsMarginsObj(utilId, paramDateStr, resolvedRev, function (err, marginsObj) {
+                    Schedule.getNewIsgsMarginsObj(utilId, paramDateStr, resolvedRev, function (err, marginsObj) {
                         if (err) {
                             return callback(err);
                         }
                         var marginVals = marginsObj['margins'];
                         speechText = getStatisticSpeechFromBlockVals(marginVals, wbesEntity, wbesMetric, statistic, blockNum);
+                        return callback(null, { 'speechText': speechText });
+                    });
+                } else if (wbesMetric == scheduleStr) {
+                    Schedule.getNewIsgsSchObj(utilId, paramDateStr, resolvedRev, function (err, marginsObj) {
+                        if (err) {
+                            return callback(err);
+                        }
+                        var schVals = marginsObj['schedules'];
+                        speechText = getStatisticSpeechFromBlockVals(schVals, wbesEntity, wbesMetric, statistic, blockNum);
                         return callback(null, { 'speechText': speechText });
                     });
                 }

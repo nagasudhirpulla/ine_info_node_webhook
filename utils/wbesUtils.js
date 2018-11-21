@@ -26,6 +26,8 @@ var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl
 var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 // string parameters --> baseUrl, date_str, rev, utilId
 var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0";
+// string parameters --> baseUrl, date_str, rev, utilId
+var isgsOnbarSchFetchUrl = module.exports.isgsOnbarSchFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=1";
 // string parameters --> baseUrl, date_str, utilId, rev, timestamp
 var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
 var buyerIsgsNetSchFetchUrl = module.exports.buyerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
@@ -583,6 +585,55 @@ var getISGSURSAvailedArray = module.exports.getISGSURSAvailedArray = function (d
             isgsURSAvailedArray[1] = row;
 
             callback(null, isgsURSAvailedArray);
+        });
+    });
+};
+
+var getISGSDcOnbarSchArray = module.exports.getISGSDcOnbarSchArray = function (date_str, rev, utilId, callback) {
+    // fetch cookie first and then do request
+    async.waterfall([
+        function (callback) {
+            fetchCookiesFromReportsUrl(function (err, cookieObj) {
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, cookieObj);
+            });
+        }
+    ], function (error, cookieObj) {
+        if (error) {
+            return callback(err);
+        }
+        var options = defaultRequestOptions;
+
+        var tokenString = new Date().getTime();
+        var cookieString = "";
+        cookieString += cookieObj[0];
+        // options.headers.cookie = cookieString;
+        console.log("Cookie String for seller dc, onbar and schedule is " + cookieString);
+        var templateUrl = isgsOnbarSchFetchUrl;
+        options.url = StringUtils.parse(templateUrl, baseUrl, date_str, rev, utilId);
+        console.log("ISGS dc, onbar and schedule JSON fetch url created is " + options.url);
+
+        // get the declarations Array
+        CSVFetcher.doGetRequest(options, function (err, resBody, res) {
+            if (err) {
+                return callback(err);
+            }
+            var isgsOnbarSchArray = JSON.parse(resBody)['jaggedarray'];
+
+            // remove the revision number from the beneficiary name
+            var row = isgsOnbarSchArray[1];
+            // remove brackets from second row
+            for (var i = 0; i < row.length; i++) {
+                var bracketIndex = row[i].indexOf("(");
+                if (bracketIndex != -1) {
+                    row[i] = row[i].substring(0, bracketIndex);
+                }
+            }
+            isgsOnbarSchArray[1] = row;
+
+            callback(null, isgsOnbarSchArray);
         });
     });
 };
