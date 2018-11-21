@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const linesHelper = require("../dbHelpers/lineHelper");
 const WbesHelper = require("../dbHelpers/wbesHelper");
+const irLinkHelper = require("../dbHelpers/irLinkHelper");
 
 router.post('/', function (req, res, next) {
     var sourceName = 'webhook-line-info';
@@ -78,44 +79,32 @@ router.post('/', function (req, res, next) {
     }
     else if (intentName == 'wbes_info' && queryParams != null) {
         //extracting the query parameters
-        var wbesEntity = queryParams && queryParams.wbes_entity && queryParams.wbes_entity[0] ? queryParams.wbes_entity[0] : null;
-        var wbesMetric = queryParams && queryParams.wbes_metric && queryParams.wbes_metric[0] ? queryParams.wbes_metric[0] : null;
-        var blockNum = queryParams && queryParams.block && queryParams.block[0] ? queryParams.block[0] : null;
-        var revNum = queryParams && queryParams.revision_number && queryParams.revision_number[0] ? queryParams.revision_number[0] : null;
-        var statistic = queryParams && queryParams.statistic && queryParams.statistic[0] ? queryParams.statistic[0] : null;
-        var dateStr = queryParams && queryParams.date && queryParams.date[0] ? queryParams.date[0] : null;
+        // var wbesEntity = queryParams && queryParams.wbes_entity && queryParams.wbes_entity[0] ? queryParams.wbes_entity[0] : null;
+        // var wbesMetric = queryParams && queryParams.wbes_metric && queryParams.wbes_metric[0] ? queryParams.wbes_metric[0] : null;
+        // var blockNum = queryParams && queryParams.block && queryParams.block[0] ? queryParams.block[0] : null;
+        // var revNum = queryParams && queryParams.revision_number && queryParams.revision_number[0] ? queryParams.revision_number[0] : null;
+        // var statistic = queryParams && queryParams.statistic && queryParams.statistic[0] ? queryParams.statistic[0] : null;
+        // var dateStr = queryParams && queryParams.date && queryParams.date[0] ? queryParams.date[0] : null;
 
         speechText = '';
 
-        // for testing purpose we are echoing the question parameters
-        /* var entitySpeeches = [];
-        if (wbesEntity != null) {
-            entitySpeeches.push(`entity is ${wbesEntity}`);
-        }
-        if (wbesMetric != null) {
-            entitySpeeches.push(`metric is ${wbesMetric}`);
-        }
-        if (blockNum != null) {
-            entitySpeeches.push(`block number is ${blockNum}`);
-        }
-        if (revNum != null) {
-            entitySpeeches.push(`revision is ${revNum}`);
-        }
-        if (statistic != null) {
-            entitySpeeches.push(`statistic is ${statistic}`);
-        }
-        if (dateStr != null) {
-            entitySpeeches.push(`date is ${dateStr}`);
-        }
-
-        if (entitySpeeches.length > 0) {
-            speechText = entitySpeeches.join(', ');
-        } else {
-            speechText = 'Sorry I could not figure out any parameters from our query...';
-        }
-        */
-        
         WbesHelper.handleWbesQuery(queryParams, function (err, resObj) {
+            // return the response
+            if (err) {
+                speechText = 'Sorry, some error occured. Please try again...';
+            } else {
+                speechText = resObj['speechText'];
+            }
+            return res.json({
+                fulfillmentText: speechText,
+                source: sourceName
+            });
+        });
+
+    } else if (intentName == 'inter_regional_schedule_info' && queryParams != null) {
+        speechText = '';
+
+        irLinkHelper.handleWbesQuery(queryParams, function (err, resObj) {
             // return the response
             if (err) {
                 speechText = 'Sorry, some error occured. Please try again...';

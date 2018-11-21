@@ -304,7 +304,7 @@ var getIsgsDcOnbarSchObj = module.exports.getIsgsDcOnbarSchObj = function (dateS
         for (var i = 2; i < Math.min(dcOnbarSchArray.length, 98); i++) {
             dcOnbarSchObj['time_blocks'].push(+dcOnbarSchArray[i][timeBlkColIndex]);
         }
-        
+
         // initialize the arrays
         for (var i = 0; i < genNames.length; i++) {
             dcOnbarSchObj[genNames[i]] = {};
@@ -322,7 +322,7 @@ var getIsgsDcOnbarSchObj = module.exports.getIsgsDcOnbarSchObj = function (dateS
                 continue;
             }
             var dcType = dcOnbarSchArray[1][matrixCol].trim().toLowerCase();
-            var dcTypeStrDict = { 'dc': 'total_dc', 'dc for sch': 'on_bar_dc', 'schedule': 'total'};
+            var dcTypeStrDict = { 'dc': 'total_dc', 'dc for sch': 'on_bar_dc', 'schedule': 'total' };
             if (['dc', 'dc for sch', 'schedule'].indexOf(dcType) > -1) {
                 // fill the dc values in the appropriate object array
                 var dcValsList = [];
@@ -436,6 +436,91 @@ var getNewIsgsSchObj = module.exports.getNewIsgsSchObj = function (utilId, date_
         return callback(null, { 'schedules': schVals });
     }
     var tasksArray = [getDCOnbarSchArray, computeSchedules];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            //console.log(err);
+            return callback(err);
+        }
+        //console.log(resObj);
+        return callback(null, resObj);
+    });
+}
+
+var getAtcSchObj = module.exports.getAtcSchObj = function (dateStr, rev, callback) {
+    WBESUtils.getATCMarginArray(dateStr, rev, function (err, atcSchArray) {
+        if (err) {
+            callback(new Error(err));
+            return;
+        }
+        var atcSchDim = ArrayHelper.getDim(atcSchArray);
+        if (atcSchDim.length < 2 || atcSchDim[0] < 98 || atcSchDim[1] < 20) {
+            callback(new Error('DC, Onbar, Sch matrix is not of minimum required shape of 98*5'));
+            return;
+        }
+
+        // get all the genNames from 1st row
+        var atcSchFirstRow = atcSchArray[0];
+        var atcHeadings = ArrayHelper.getUniqueList(atcSchFirstRow.slice(2));
+
+        //trim all generator names
+        atcHeadings = atcHeadings.map(Function.prototype.call, String.prototype.trim);
+
+        // create a dictionary of generators for result object
+        var atcSchObj = {};
+        var links = ["east_west", "north_west", "west_north", "west_south", "south_west", "west_east"];
+        atcSchObj['links'] = links;
+        atcSchObj['time_blocks'] = [];
+        var timeBlkColIndex = atcSchArray[1].map(Function.prototype.call, String.prototype.trim).map(Function.prototype.call, String.prototype.toLowerCase).indexOf('time block');
+        for (var i = 2; i < Math.min(atcSchArray.length, 98); i++) {
+            atcSchObj['time_blocks'].push(+atcSchArray[i][timeBlkColIndex]);
+        }
+
+        // initialize the link schedule arrays
+        for (var i = 0; i < links.length; i++) {
+            atcSchObj[links[i]] = {};
+            atcSchObj[links[i]]['total'] = [];
+            atcSchObj[links[i]]['atc_margin'] = [];
+            atcSchObj[links[i]]['net'] = [];
+        }
+
+        // scan through all the columns for link names and total, atc_margin, net values
+        for (let linkIter = 0; linkIter < links.length; linkIter++) {
+            const linkName = links[linkIter];
+            const schTypes = ['total', 'atc_margin', 'net'];
+            for (let schTypeIter = 0; schTypeIter < schTypes.length; schTypeIter++) {
+                const schType = schTypes[schTypeIter];
+                var schVals = [];
+                var matrixCol = atcSchArray[0].indexOf(linkName + '_' + schType);
+                for (var matrixRow = 2; matrixRow < Math.min(atcSchArray.length, 98); matrixRow++) {
+                    schVals.push(atcSchArray[matrixRow][matrixCol]);
+                }
+                atcSchObj[linkName][schType] = schVals;
+            }
+        }
+        return callback(null, atcSchObj);
+    });
+};
+
+var getAtcSch = module.exports.getAtcSch = function (from_region, to_region, sch_type, date_str, rev, callback) {
+    var getAtcSchArray = function (callback) {
+        //stub do from here
+        getAtcSchObj(date_str, rev, function (err, atcSchObj) {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, { 'schObj':atcSchObj });
+        });
+    };
+
+    var computeSchedules = function (resObj, callback) {
+        const reqLink = from_region + '_' + to_region;
+        if (['total', 'atc_margin', 'net'].indexOf(sch_type) < 0) {
+            return callback(new Error('Non available schedule type'));
+        }
+        const schVals = resObj['schObj'][reqLink][sch_type];
+        return callback(null, { 'schedules': schVals });
+    }
+    var tasksArray = [getAtcSchArray, computeSchedules];
     async.waterfall(tasksArray, function (err, resObj) {
         if (err) {
             //console.log(err);

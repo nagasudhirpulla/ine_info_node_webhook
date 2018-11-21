@@ -28,6 +28,8 @@ var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbe
 var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0";
 // string parameters --> baseUrl, date_str, rev, utilId
 var isgsOnbarSchFetchUrl = module.exports.isgsOnbarSchFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=1";
+// string parameters --> baseUrl, date_str, rev
+var atcMarginUrl = module.exports.isgsOnbarSchFetchUrl = "%s/wbes/Report/GetFlowGateFirst?date=%s&revision=%s&pathLinkId=0&isLink=1";
 // string parameters --> baseUrl, date_str, utilId, rev, timestamp
 var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
 var buyerIsgsNetSchFetchUrl = module.exports.buyerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
@@ -634,6 +636,54 @@ var getISGSDcOnbarSchArray = module.exports.getISGSDcOnbarSchArray = function (d
             isgsOnbarSchArray[1] = row;
 
             callback(null, isgsOnbarSchArray);
+        });
+    });
+};
+
+var getATCMarginArray = module.exports.getATCMarginArray = function (date_str, rev, callback) {
+    // fetch cookie first and then do request
+    async.waterfall([
+        function (callback) {
+            fetchCookiesFromReportsUrl(function (err, cookieObj) {
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, cookieObj);
+            });
+        }
+    ], function (error, cookieObj) {
+        if (error) {
+            return callback(err);
+        }
+        var options = defaultRequestOptions;
+
+        var tokenString = new Date().getTime();
+        var cookieString = "";
+        cookieString += cookieObj[0];
+        // options.headers.cookie = cookieString;
+        console.log("Cookie String for seller dc, onbar and schedule is " + cookieString);
+        var templateUrl = atcMarginUrl;
+        options.url = StringUtils.parse(templateUrl, baseUrl, date_str, rev);
+        console.log("ATC schedule JSON fetch url created is " + options.url);
+
+        // get the declarations Array
+        CSVFetcher.doGetRequest(options, function (err, resBody, res) {
+            if (err) {
+                return callback(err);
+            }
+            var atcSchArray = JSON.parse(resBody)['array'];
+
+            // rename the first row of the array with relavent links
+            var row = atcSchArray[0];
+            row = ['time block', 'time desc',
+                'east_west_total', 'east_west_atc_margin', 'east_west_net',
+                'north_west_total', 'north_west_atc_margin', 'north_west_net',
+                'west_north_total', 'west_north_atc_margin', 'west_north_net',
+                'west_south_total', 'west_south_atc_margin', 'west_south_net',
+                'south_west_total', 'south_west_atc_margin', 'south_west_net',
+                'west_east_total', 'west_east_atc_margin', 'west_east_net'];
+            atcSchArray[0] = row;
+            callback(null, atcSchArray);
         });
     });
 };
