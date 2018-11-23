@@ -11,7 +11,7 @@ var irLinkHelper = require('../dbHelpers/irLinkHelper');
 var queryParams = {
     from_region: ["north"],
     to_region: ["west"],
-    wbes_metric : ["atc_margin"]
+    ir_schedule_metric : ["atc_margin"]
 };
 
 irLinkHelper.handleWbesQuery(queryParams, function (err, res) {
