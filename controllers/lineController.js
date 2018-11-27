@@ -2,6 +2,7 @@ const router = require('express').Router();
 const linesHelper = require("../dbHelpers/lineHelper");
 const WbesHelper = require("../dbHelpers/wbesHelper");
 const irLinkHelper = require("../dbHelpers/irLinkHelper");
+const spsHelper = require("../dbHelpers/spsHelper");
 
 router.post('/', function (req, res, next) {
     var sourceName = 'webhook-line-info';
@@ -117,6 +118,21 @@ router.post('/', function (req, res, next) {
             });
         });
 
+    } else if (intentName == 'sps_info' && queryParams != null) {
+        speechText = '';
+
+        spsHelper.handleWbesQuery(queryParams, function (err, resObj) {
+            // return the response
+            if (err) {
+                speechText = 'Sorry, some error occured. Please try again...';
+            } else {
+                speechText = resObj['speechText'];
+            }
+            return res.json({
+                fulfillmentText: speechText,
+                source: sourceName
+            });
+        });
     } else {
         if (intentName == 'line_info' && queryParams != null) {
             var unCapturedVars = [];
