@@ -11,8 +11,8 @@ module.exports.info = {
     When only one 765 kV Agra-Gwalior Line is in service and steady state flow crosses 2500 MW Total In West to North for more than 10 seconds, in Northern Region Shed load of group C and D.",
     
     "Raichur Solapur": "If the total flow on 765 kV Solapur-Raichur double circuit is more than 3000 MW and remains for 5 seconds in Solapur to Raichur direction sensed by both at Sholapur and Raichur, \
-    RS2 545 MW group load Shed in SR Grid. If the Flow remains above 3000 MW for further 2.5 seconds, additional RS3 633 MW group load will be shed. \
-    If Loss of import by SR on 765 kV Solapur-Raichur D/C by more than 1500 MW due to tripping of these lines, Load Shedding in SR RS1, RS2 and RS3",
+    R S 2 545 MW group load Shed in SR Grid. If the Flow remains above 3000 MW for further 2.5 seconds, additional R S 3 633 MW group load will be shed. \
+    If Loss of import by SR on 765 kV Solapur-Raichur Double Circuit by more than 1500 MW due to tripping of these lines, Load Shedding in SR R S 1, R S 2 and R S 3",
     
     "Wardha Nizamabad": "",
     
@@ -36,7 +36,10 @@ module.exports.info = {
     "Sipat": "Alarm in case of ICTs loading exceeds 100 % for 5 seconds. \
     If any ICTs load exceeds 130% of the rated load for more than 4 sec, unload unit 1,2,4 and 5 each by 150MW (subject to minimum loading of 500MW in stage-1 units and subject to minimum loading of 350MW in stage-2 units). \
     If any ICTs load remains above 130% even after unloading unit 1,2,4 and 5, Unload Unit 3 by 150 MW after 300 sec (subject to minimum loading of 500 MW.) \
-    Once the load has reduced below 130%, manual action to reduce to bring down ICT loading below 100%"
+    Once the load has reduced below 130%, manual action to reduce to bring down ICT loading below 100%",
+
+    "KSK": "If Generation at KSK is more than 1200 MW and one circuit of 400kV KSK-Champa double circuit trips, \
+    trip one unit KSK Mahanadi"
 };
 
 
