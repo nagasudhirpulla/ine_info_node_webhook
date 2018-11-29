@@ -1,8 +1,8 @@
 var wbesHelper = require('../dbHelpers/wbesHelper');
 
 var queryParams = {
-    wbes_entity: ["CGPL"],
-    wbes_metric : ["schedule"]
+    wbes_entity: ["MOUDA"],
+    wbes_metric : ["requisition"]
 };
 
 wbesHelper.handleWbesQuery(queryParams, function (err, res) {

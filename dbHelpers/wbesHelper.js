@@ -13,6 +13,7 @@ const stoaStr = 'stoa';
 const ltaStr = 'lta';
 const mtoaStr = 'mtoa';
 const marginStr = 'margin';
+const requisitionStr = 'requisition';
 var ArrayHelper = require('../utils/arrayHelpers');
 var async = require('async');
 
@@ -160,6 +161,17 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
                             return callback(err);
                         }
                         var schVals = marginsObj['schedules'];
+                        speechText = getStatisticSpeechFromBlockVals(schVals, wbesEntity, wbesMetric, statistic, blockNum);
+                        return callback(null, { 'speechText': speechText });
+                    });
+                } else if (wbesMetric == requisitionStr) {
+                    // currently we are dealing only generators
+                    var isSeller = true;
+                    Schedule.getIsgsReqObj(utilId, paramDateStr, resolvedRev, isSeller, function (err, reqVals) {
+                        if (err) {
+                            return callback(err);
+                        }
+                        var schVals = reqVals;
                         speechText = getStatisticSpeechFromBlockVals(schVals, wbesEntity, wbesMetric, statistic, blockNum);
                         return callback(null, { 'speechText': speechText });
                     });

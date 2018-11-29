@@ -35,6 +35,8 @@ var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/wbe
 var buyerIsgsNetSchFetchUrl = module.exports.buyerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
 // string parameters --> baseUrl, date_str, rev, utilId
 var isgsURSAvailedFetchUrl = module.exports.isgsURSAvailedFetchUrl = "%s/wbes/Report/GetUrsReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnReg=0";
+// string parameters --> baseUrl, isBuyer, utilId, date_str, rev
+var ISGSRequisitionUrl = module.exports.ISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=%s&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=0";
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {

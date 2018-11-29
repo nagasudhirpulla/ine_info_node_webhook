@@ -4,6 +4,7 @@
 var WBESUtils = require("../utils/wbesUtils");
 var ArrayHelper = require('../utils/arrayHelpers');
 var async = require('async');
+var WrReqUtils = require("../utils/wrReqUtils");
 
 var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId, callback) {
     WBESUtils.getISGSDeclarationsArray(dateStr, rev, utilId, function (err, dcMatrixArray) {
@@ -528,5 +529,15 @@ var getAtcSch = module.exports.getAtcSch = function (from_region, to_region, sch
         }
         //console.log(resObj);
         return callback(null, resObj);
+    });
+}
+
+var getIsgsReqVals = module.exports.getIsgsReqObj = function (utilId, date_str, rev, isSeller, callback) {
+    WrReqUtils.getUtilISGSReq(utilId, date_str, rev, isSeller, function (err, reqVals) {
+        if (err) {
+            //console.log(err);
+            return callback(err);
+        }
+        return callback(null, reqVals);
     });
 }
