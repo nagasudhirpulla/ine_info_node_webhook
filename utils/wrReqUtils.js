@@ -46,7 +46,7 @@ var getUtilISGSTotalReq = module.exports.getUtilISGSReq = function (utilId, date
             var arrayWidth = isgsReqArray[0].length;
             var reqVals = [];
             for (let reqRowIter = 2; reqRowIter < 97; reqRowIter++) {
-                reqVals.push(isgsReqArray[reqRowIter][arrayWidth - 1]);
+                reqVals.push(+isgsReqArray[reqRowIter][arrayWidth - 1]);
             }
             callback(null, reqVals);
         });
