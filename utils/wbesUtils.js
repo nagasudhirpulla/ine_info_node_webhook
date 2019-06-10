@@ -606,7 +606,7 @@ var getISGSDcOnbarSchArray = module.exports.getISGSDcOnbarSchArray = function (d
         }
     ], function (error, cookieObj) {
         if (error) {
-            return callback(err);
+            return callback(error);
         }
         var options = defaultRequestOptions;
 
