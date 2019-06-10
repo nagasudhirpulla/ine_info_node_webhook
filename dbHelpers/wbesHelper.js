@@ -32,7 +32,10 @@ module.exports.handleWbesQuery = function (queryParams, callback) {
             // Resolve the utility 
             var utilId = UtilIds.utilIds[wbesEntity];
             if (utilId == undefined || utilId == null) {
-                return callback({ 'message': 'Could not figure out the wbes utility.' });
+                utilId = UtilIds.utilIds[(wbesEntity + "").toUpperCase()];
+                if (utilId == undefined || utilId == null) {
+                    return callback({ 'message': 'Could not figure out the wbes utility.' });
+                }
             }
             // Resolve the date
             var reqDate = new Date();
