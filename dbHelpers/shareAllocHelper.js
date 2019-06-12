@@ -31,13 +31,16 @@ module.exports.handleQuery = function (queryParams, callback) {
 
     if (off_peak_info_row == null && peak_info_row == null) {
         share_alloc_info_string = 'Sorry, we do not have the Share allocation info of ' + const_entity + ' in ' + wbes_entity;
-    } else if (peak_info_row != null) {
-        share_alloc_info_string += 'Peak Share allocation of ' + const_entity + ' in ' + wbes_entity + ' is ' + peak_info_row[2] + '%';
-    } else if (off_peak_info_row != null) {
-        if (share_alloc_info_string == '') {
-            share_alloc_info_string = 'Off-Peak Share allocation of ' + const_entity + ' in ' + wbes_entity + ' is ' + off_peak_info_row[2] + '%';
-        } else {
-            share_alloc_info_string += ' and Off-Peak Share allocation of is ' + off_peak_info_row[2] + '%';
+    } else {
+        if (peak_info_row != null) {
+            share_alloc_info_string += 'Peak Share allocation of ' + const_entity + ' in ' + wbes_entity + ' is ' + peak_info_row[2] + '%';
+        }
+        if (off_peak_info_row != null) {
+            if (share_alloc_info_string == '') {
+                share_alloc_info_string = 'Off-Peak Share allocation of ' + const_entity + ' in ' + wbes_entity + ' is ' + off_peak_info_row[2] + '%';
+            } else {
+                share_alloc_info_string += ' and Off-Peak Share allocation of is ' + off_peak_info_row[2] + '%';
+            }
         }
     }
 
