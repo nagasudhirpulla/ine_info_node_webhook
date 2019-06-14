@@ -4,7 +4,7 @@ module.exports.handleQuery = function (queryParams, callback) {
     var speechText = '';
     var cod_info_string = '';
     var cod_entity = queryParams && queryParams.cod_entity && queryParams.cod_entity[0] ? queryParams.cod_entity[0] : null;
-    
+
     // derive the cod date for the entity
     const cod_obj = CODInfo.cod_dates[cod_entity];
     if (typeof cod_obj == 'undefined') {
@@ -15,16 +15,19 @@ module.exports.handleQuery = function (queryParams, callback) {
         // get all the unit names through keys of the object
         var unit_names = Object.keys(cod_obj);
         // iterate through all the units for dates
+        if (unit_names.length > 0) {
+            cod_info_string += 'C.O.D date of ';
+        }
         for (let unitIter = 0; unitIter < unit_names.length; unitIter++) {
             const unit = unit_names[unitIter];
-            cod_info_string += 'C.O.D date of ' + unit + ' is ' + cod_obj[unit];
+            cod_info_string += unit + ' is ' + cod_obj[unit];
             if (unitIter != unit_names.length - 1) {
                 //do not append comma for last unit
                 cod_info_string += ", "
             }
         }
     }
-    
+
     // prepare speech text and send
     if (cod_entity != null) {
         // derived the cod entity
