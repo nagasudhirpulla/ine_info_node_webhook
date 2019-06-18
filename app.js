@@ -57,3 +57,13 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(process.env.PORT || 3000, () => console.log('App listening on port 3000!'));
+
+const geoInfo = require('./dbHelpers/geographicalInfoHelper');
+geoInfo.initGeoInfoGlobalVar(function (errs, data) {
+    if (errs != null && errs.length != 0) {
+        return console.log(errs);
+    }
+    // console.log(data);
+    console.log(`Completed reading the geographical info into the global varaible`);
+    // console.log(geoInfo.getGeoInfoGlobalVar());
+});
