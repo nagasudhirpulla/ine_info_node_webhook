@@ -3,6 +3,9 @@ const groupObjBy = require('../utils/objUtils').groupObjBy;
 
 // var path = require('path');
 // var excelPath = path.join(__dirname, '..', 'dbHelpers', 'geographical_info.xlsx');
+var geo_info_state = {
+
+};
 
 module.exports.initGeoInfoGlobalVar = function (callback) {
     const schema = {
@@ -40,13 +43,13 @@ module.exports.initGeoInfoGlobalVar = function (callback) {
             return callback(errors);
         }
         // console.log(groupObjBy(rows, 'name'));
-        global.geo_info = groupObjBy(rows, 'name');
+        geo_info_state = groupObjBy(rows, 'name')
         callback(null, global.geo_info);
     })
 }
 
-const getGeoInfoGlobalVar = module.exports.getGeoInfoGlobalVar = function () {
-    return global.geo_info;
+module.exports.getGeoInfoGlobalVar = function () {
+    return geo_info_state;
 }
 
 module.exports.handleQuery = function (queryParams, callback) {
@@ -55,7 +58,7 @@ module.exports.handleQuery = function (queryParams, callback) {
     var geo_entity = queryParams && queryParams.geo_entity && queryParams.geo_entity[0] ? queryParams.geo_entity[0] : null;
 
     // derive the peak share allocation info for the combination
-    let geo_info_row = global.geo_info[geo_entity];
+    let geo_info_row = geo_info_state[geo_entity];
     if (geo_info_row == undefined || geo_info_row == null) {
         geo_info_string = 'Sorry, we do not have the geographical info of ' + geo_entity;
     } else {
