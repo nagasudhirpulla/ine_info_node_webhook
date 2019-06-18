@@ -13,11 +13,3 @@ var getAppState = module.exports.getAppState = function (key) {
     }
     return app_state[key];
 }
-
-module.exports.registerGeoInfoAppState = function (obj) {
-    registerAppState("geo_info", obj);
-}
-
-module.exports.getGeoInfoAppState = function () {
-    getAppState("geo_info");
-}

@@ -49,7 +49,7 @@ module.exports.initGeoInfoGlobalVar = function (callback) {
         }
         // console.log(groupObjBy(rows, 'name'));
         registerGeoInfoAppState(groupObjBy(rows, 'name'));
-        callback(null, appState.getGeoInfoAppState());
+        callback(null, getGeoInfoAppState());
     })
 }
 
