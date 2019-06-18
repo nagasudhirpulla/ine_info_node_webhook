@@ -1,11 +1,16 @@
 const readXlsxFile = require('read-excel-file/node');
 const groupObjBy = require('../utils/objUtils').groupObjBy;
+const appState = require('../appState');
 
 // var path = require('path');
 // var excelPath = path.join(__dirname, '..', 'dbHelpers', 'geographical_info.xlsx');
-var geo_info_state = {
-    geo_info: {}
-};
+var registerGeoInfoAppState = module.exports.registerGeoInfoAppState = function (obj) {
+    appState.registerAppState("geo_info", obj);
+}
+
+var getGeoInfoAppState = module.exports.getGeoInfoAppState = function () {
+    return appState.getAppState("geo_info");
+}
 
 module.exports.initGeoInfoGlobalVar = function (callback) {
     const schema = {
@@ -43,13 +48,21 @@ module.exports.initGeoInfoGlobalVar = function (callback) {
             return callback(errors);
         }
         // console.log(groupObjBy(rows, 'name'));
-        geo_info_state.geo_info = groupObjBy(rows, 'name')
-        callback(null, geo_info_state.geo_info);
+        registerGeoInfoAppState(groupObjBy(rows, 'name'));
+        callback(null, appState.getGeoInfoAppState());
     })
 }
 
-module.exports.getGeoInfoGlobalVar = function () {
-    return geo_info_state.geo_info;
+var getGeoInfoOfEntity = module.exports.getGeoInfoOfEntity = function (geo_entity) {
+    const entStr = geo_entity + "";
+    let entityGeoInfo = getGeoInfoAppState()[entStr];
+    if (typeof entityGeoInfo == 'object' && typeof entityGeoInfo.length == 'number' && entityGeoInfo.length >= 0) {
+        entityGeoInfo = entityGeoInfo[0];
+    }
+    if (entityGeoInfo != null && entityGeoInfo != undefined) {
+        return entityGeoInfo;
+    }
+    return null;
 }
 
 module.exports.handleQuery = function (queryParams, callback) {
@@ -58,13 +71,11 @@ module.exports.handleQuery = function (queryParams, callback) {
     var geo_entity = queryParams && queryParams.geo_entity && queryParams.geo_entity[0] ? queryParams.geo_entity[0] : null;
 
     // derive the peak share allocation info for the combination
-    let geo_info_row = geo_info_state.geo_info[geo_entity];
+    let geo_info_row = getGeoInfoOfEntity(geo_entity);
     if (geo_info_row == undefined || geo_info_row == null) {
         geo_info_string = 'Sorry, we do not have the geographical info of ' + geo_entity;
     } else {
-        if (geo_info_row != null) {
-            geo_info_string += geo_info_row['info'];
-        }
+        geo_info_string += geo_info_row['info'];
     }
 
     // prepare speech text and send

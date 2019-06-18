@@ -4,5 +4,9 @@ geoInfo.initGeoInfoGlobalVar(function (errs, data) {
         return console.log(errs);
     }
     // console.log(data);
-    console.log(geoInfo.getGeoInfoGlobalVar()['GADARWARA']);
+    // console.log(geoInfo.getGeoInfoGlobalVar()['GADARWARA']);
+    queryParams = { geo_entity: ['GADARWARA'] };
+    geoInfo.handleQuery(queryParams, function (err, data) {
+        console.log(data);
+    });
 });
