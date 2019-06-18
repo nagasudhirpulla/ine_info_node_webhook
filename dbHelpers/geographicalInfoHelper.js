@@ -45,6 +45,34 @@ module.exports.initGeoInfoGlobalVar = function (callback) {
     })
 }
 
-module.exports.getGeoInfoGlobalVar = function () {
+const getGeoInfoGlobalVar = module.exports.getGeoInfoGlobalVar = function () {
     return global.geo_info;
 }
+
+const geoInfoOfEntity = module.exports.geoInfoOfEntity = function (entity) {
+    const entStr = entity + "";
+    if (getGeoInfoGlobalVar[entStr] == undefined) {
+        return undefined;
+    }
+    return global.geo_info[entStr];
+}
+
+module.exports.handleQuery = function (queryParams, callback) {
+    var speechText = '';
+    var geo_info_string = '';
+    var geo_entity = queryParams && queryParams.geo_entity && queryParams.geo_entity[0] ? queryParams.geo_entity[0] : null;
+
+    // derive the peak share allocation info for the combination
+    let geo_info_row = geoInfoOfEntity(geo_entity);
+    if (geo_info_row == undefined || geo_info_row == null) {
+        geo_info_string = 'Sorry, we do not have the geographical info of ' + geo_entity;
+    } else {
+        if (geo_info_row != null) {
+            geo_info_string += geo_info_row['info'];
+        }
+    }
+
+    // prepare speech text and send
+    speechText = geo_info_string + ", please ask for another information";
+    return callback(null, { 'speechText': speechText });
+};

@@ -165,6 +165,21 @@ router.post('/', function (req, res, next) {
                 source: sourceName
             });
         });
+    } else if (intentName == 'geographical_info' && queryParams != null) {
+        speechText = '';
+
+        shareAllocHelper.handleQuery(queryParams, function (err, resObj) {
+            // return the response
+            if (err) {
+                speechText = 'Sorry, some error occured. Please try again...';
+            } else {
+                speechText = resObj['speechText'];
+            }
+            return res.json({
+                fulfillmentText: speechText,
+                source: sourceName
+            });
+        });
     } else {
         if (intentName == 'line_info' && queryParams != null) {
             var unCapturedVars = [];
