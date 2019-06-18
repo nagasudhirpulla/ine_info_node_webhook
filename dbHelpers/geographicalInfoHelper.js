@@ -44,7 +44,7 @@ module.exports.initGeoInfoGlobalVar = function (callback) {
         }
         // console.log(groupObjBy(rows, 'name'));
         geo_info_state = groupObjBy(rows, 'name')
-        callback(null, global.geo_info);
+        callback(null, geo_info_state);
     })
 }
 
