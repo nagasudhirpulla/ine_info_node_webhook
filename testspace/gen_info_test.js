@@ -5,7 +5,7 @@ genInfo.initGenInfoGlobalVar(function (errs, data) {
     }
     // console.log(data);
     // console.log(geoInfo.getGeoInfoGlobalVar()['GADARWARA']);
-    queryParams = { gen_entity: ['GADARWARA'], gen_param: ['installed_capacity'] };
+    queryParams = { generator_entity: ['GADARWARA'], generator_parameter: ['installed_capacity'] };
     genInfo.handleQuery(queryParams, function (err, data) {
         console.log(data);
     });
