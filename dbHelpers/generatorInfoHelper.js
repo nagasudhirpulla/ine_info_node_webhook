@@ -77,13 +77,13 @@ module.exports.handleQuery = function (queryParams, callback) {
     } else {
         // installed_capacity	ultimate_capacity	fixed_cost	var_cost
         if (gen_param == "installed_capacity") {
-            gen_info_string += `Installed capacity of ${gen_entity} is ${gen_info_row['installed_capacity']}`;
+            gen_info_string += `Installed capacity of ${gen_entity} is ${gen_info_row['installed_capacity']} MW`;
         } else if (gen_param == "ultimate_capacity") {
-            gen_info_string += `Ultimate capacity of ${gen_entity} is ${gen_info_row['ultimate_capacity']}`;
+            gen_info_string += `Ultimate capacity of ${gen_entity} is ${gen_info_row['ultimate_capacity']} MW`;
         } else if (gen_param == "fixed_cost") {
-            gen_info_string += `Fixed cost of ${gen_entity} is ${gen_info_row['fixed_cost']}`;
+            gen_info_string += `Fixed cost of ${gen_entity} is ${gen_info_row['fixed_cost']} paise`;
         } else if (gen_param == "var_cost") {
-            gen_info_string += `Variable cost of ${gen_entity} is ${gen_info_row['var_cost']}`;
+            gen_info_string += `Variable cost of ${gen_entity} is ${gen_info_row['var_cost']} paise`;
         } else {
             gen_info_string += `Sorry, we donot have the ${gen_param} info of ${gen_entity}`;
         }
