@@ -6,6 +6,7 @@ const spsHelper = require("../dbHelpers/spsHelper");
 const codHelper = require("../dbHelpers/codHelper");
 const shareAllocHelper = require("../dbHelpers/shareAllocHelper");
 const geographicalInfoHelper = require("../dbHelpers/geographicalInfoHelper");
+const generatorInfoHelper = require("../dbHelpers/generatorInfoHelper");
 
 router.post('/', function (req, res, next) {
     var sourceName = 'webhook-line-info';
@@ -168,8 +169,22 @@ router.post('/', function (req, res, next) {
         });
     } else if (intentName == 'geographical_info' && queryParams != null) {
         speechText = '';
-
         geographicalInfoHelper.handleQuery(queryParams, function (err, resObj) {
+            // return the response
+            if (err) {
+                speechText = 'Sorry, some error occured. Please try again...';
+            } else {
+                speechText = resObj['speechText'];
+            }
+            return res.json({
+                fulfillmentText: speechText,
+                source: sourceName
+            });
+        });
+    } else if (intentName == 'generator_info' && queryParams != null) {
+        speechText = '';
+        //stub
+        generatorInfoHelper.handleQuery(queryParams, function (err, resObj) {
             // return the response
             if (err) {
                 speechText = 'Sorry, some error occured. Please try again...';

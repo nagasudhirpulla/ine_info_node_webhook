@@ -68,3 +68,13 @@ geoInfo.initGeoInfoGlobalVar(function (errs, data) {
     console.log(`Completed reading the geographical info into the global varaible`);
     // console.log(geoInfo.getGeoInfoGlobalVar());
 });
+
+const genInfo = require('./dbHelpers/generatorInfoHelper');
+genInfo.initGenInfoGlobalVar(function (errs, data) {
+    if (errs != null && errs.length != 0) {
+        return console.log(errs);
+    }
+    // console.log(data);
+    console.log(`Completed reading the generator info into the global varaible`);
+    // console.log(geoInfo.getGeoInfoGlobalVar());
+});

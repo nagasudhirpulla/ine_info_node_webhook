@@ -2,8 +2,6 @@ const readXlsxFile = require('read-excel-file/node');
 const groupObjBy = require('../utils/objUtils').groupObjBy;
 const appState = require('../appState');
 
-var path = require('path');
-var excelPath = path.join(__dirname, '..', 'dbHelpers', 'geographical_info.xlsx');
 var registerGeoInfoAppState = module.exports.registerGeoInfoAppState = function (obj) {
     appState.registerAppState("geo_info", obj);
 }
@@ -41,6 +39,8 @@ module.exports.initGeoInfoGlobalVar = function (callback) {
         }
     }
 
+    const path = require('path');
+    const excelPath = path.join(__dirname, '..', 'dbHelpers', 'geographical_info.xlsx');
     readXlsxFile(excelPath, { schema }).then(({ rows, errors }) => {
         // `errors` have shape `{ row, column, error, value }`
         if (errors.length != 0) {
