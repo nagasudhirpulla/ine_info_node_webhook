@@ -67,8 +67,8 @@ var getGenInfoOfEntity = module.exports.getGenInfoOfEntity = function (gen_entit
 module.exports.handleQuery = function (queryParams, callback) {
     var speechText = '';
     var gen_info_string = '';
-    var gen_entity = queryParams && queryParams.gen_entity && queryParams.gen_entity[0] ? queryParams.gen_entity[0] : null;
-    var gen_param = queryParams && queryParams.gen_param && queryParams.gen_param[0] ? queryParams.gen_param[0] : null;
+    var gen_entity = queryParams && queryParams.generator_entity && queryParams.generator_entity[0] ? queryParams.generator_entity[0] : null;
+    var gen_param = queryParams && queryParams.generator_parameter && queryParams.generator_parameter[0] ? queryParams.generator_parameter[0] : null;
 
     // derive the peak share allocation info for the combination
     let gen_info_row = getGenInfoOfEntity(gen_entity);
