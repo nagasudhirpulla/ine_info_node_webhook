@@ -70,7 +70,7 @@ module.exports.handleQuery = function (queryParams, callback) {
     var gen_info_string = '';
     var gen_entity = queryParams && queryParams.generator_entity && queryParams.generator_entity[0] ? queryParams.generator_entity[0] : null;
     var gen_param = queryParams && queryParams.generator_parameter && queryParams.generator_parameter[0] ? queryParams.generator_parameter[0] : null;
-    var gen_unit_name = queryParams && queryParams.gen_unit_name && queryParams.gen_unit_name[0] ? queryParams.gen_unit_name[0] : null;
+    var gen_unit_name = queryParams && queryParams.generator_unit_name && queryParams.generator_unit_name[0] ? queryParams.generator_unit_name[0] : null;
 
     // derive the peak share allocation info for the combination
     let gen_units_info_obj = getGenUnitsInfoOfEntity(gen_entity);
