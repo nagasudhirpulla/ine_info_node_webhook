@@ -75,7 +75,6 @@ module.exports.handleQuery = function (queryParams, callback) {
     if (gen_info_row == undefined || gen_info_row == null) {
         gen_info_string = 'Sorry, we do not have the info of the generator ' + gen_entity;
     } else {
-        // installed_capacity	ultimate_capacity	fixed_cost	var_cost
         if (gen_param == "installed_capacity") {
             gen_info_string += `Installed capacity of ${gen_entity} is ${gen_info_row['installed_capacity']} MW`;
         } else if (gen_param == "ultimate_capacity") {
