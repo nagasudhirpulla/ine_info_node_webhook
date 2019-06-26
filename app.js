@@ -78,3 +78,13 @@ genInfo.initGenInfoGlobalVar(function (errs, data) {
     console.log(`Completed reading the generator info into the global varaible`);
     // console.log(geoInfo.getGeoInfoGlobalVar());
 });
+
+const genUnitInfo = require('./dbHelpers/generatorUnitInfoHelper');
+genUnitInfo.initGenUnitInfoGlobalVar(function (errs, data) {
+    if (errs != null && errs.length != 0) {
+        return console.log(errs);
+    }
+    // console.log(data);
+    console.log(`Completed reading the generator units info into the global varaible`);
+    // console.log(geoInfo.getGeoInfoGlobalVar());
+});

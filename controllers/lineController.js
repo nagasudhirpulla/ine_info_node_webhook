@@ -7,6 +7,7 @@ const codHelper = require("../dbHelpers/codHelper");
 const shareAllocHelper = require("../dbHelpers/shareAllocHelper");
 const geographicalInfoHelper = require("../dbHelpers/geographicalInfoHelper");
 const generatorInfoHelper = require("../dbHelpers/generatorInfoHelper");
+const generatorUnitInfoHelper = require("../dbHelpers/generatorUnitInfoHelper");
 
 router.post('/', function (req, res, next) {
     var sourceName = 'webhook-line-info';
@@ -183,8 +184,26 @@ router.post('/', function (req, res, next) {
         });
     } else if (intentName == 'generator_info' && queryParams != null) {
         speechText = '';
-        //stub
         generatorInfoHelper.handleQuery(queryParams, function (err, resObj) {
+            // return the response
+            if (err) {
+                speechText = 'Sorry, some error occured. Please try again...';
+            } else {
+                speechText = resObj['speechText'];
+            }
+            return res.json({
+                fulfillmentText: speechText,
+                source: sourceName
+            });
+        });
+    } else if (['generator_ramp_info', 'generator_trial_run_date_info'].includes(intentName) && queryParams != null) {
+        speechText = '';
+        if (intentName == 'generator_ramp_info') {
+            queryParams['generator_parameter'] = ['ramp'];
+        } else if (intentName == 'generator_trial_run_date_info') {
+            queryParams['generator_parameter'] = ['trial_run_date'];
+        }
+        generatorUnitInfoHelper.handleQuery(queryParams, function (err, resObj) {
             // return the response
             if (err) {
                 speechText = 'Sorry, some error occured. Please try again...';
