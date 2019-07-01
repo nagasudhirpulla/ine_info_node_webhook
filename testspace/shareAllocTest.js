@@ -19,5 +19,12 @@ shareAllocInfo.initShareAllocInfoAppState(function (errs, data) {
             return console.log(err);
         }
         console.log(reqVals);
-    });    
+    });   
+    
+    shareAllocInfo.handleQueryForBeneficiaryinfo(queryParams, function (err, reqVals) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log(reqVals);
+    });
 });

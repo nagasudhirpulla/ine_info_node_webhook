@@ -98,3 +98,39 @@ module.exports.handleQuery = function (queryParams, callback) {
     speechText = `${share_alloc_info_string}, please ask for another information`;
     return callback(null, { 'speechText': speechText });
 };
+
+const constNameToSpeechName = function (constituent_name) {
+    if (typeof constituent_name == "string") {
+        return constituent_name.replace(/_/g, ' ');
+    }
+    return constituent_name;
+}
+
+module.exports.handleQueryForBeneficiaryinfo = function (queryParams, callback) {
+    let speechText = '';
+    let beneficiaries_info_string = '';
+    let wbes_entity = queryParams && queryParams.wbes_entity && queryParams.wbes_entity[0] ? queryParams.wbes_entity[0] : null;
+    // to delete
+    // var const_entity = queryParams && queryParams.constituent_entity && queryParams.constituent_entity[0] ? queryParams.constituent_entity[0] : null;
+
+    // derive the peak share allocation info for the combination
+    const peak_alloc_rows = getShareAllocInfoAppState()['shares_peak'];
+    let peak_info_rows = [];
+    for (let peakInfoIter = 0; peakInfoIter < peak_alloc_rows.length; peakInfoIter++) {
+        // check if this row matches
+        let tempRow = peak_alloc_rows[peakInfoIter];
+        if (tempRow["gen_name"] == wbes_entity) {
+            peak_info_rows.push(tempRow);
+        }
+    }
+
+    if (peak_info_rows.length <= 0) {
+        beneficiaries_info_string = `Sorry, we do not have the beneficiaries info of ${wbes_entity}`;
+    } else {
+        beneficiaries_info_string += `Beneficiaries of ${wbes_entity} are ${peak_info_rows.map(a => constNameToSpeechName(a.constituent_name)).join(', ')}`;
+    }
+
+    // prepare speech text and send
+    speechText = `${beneficiaries_info_string}, please ask for another information`;
+    return callback(null, { 'speechText': speechText });
+};
