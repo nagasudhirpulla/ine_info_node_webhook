@@ -95,11 +95,12 @@ module.exports.handleQuery = function (queryParams, callback) {
         }
 
         const param_to_dict_mapping = { "ramp": "ramp", "trial_run_date": "trial_run_date" }
+        const dict_key_to_speech_key_mapping = { "ramp": "Ramp rate", "trial_run_date": "Trial run date" }
         //synthesize speech based on the units selected
         if (speechUnits.length > 0 && gen_param != null) {
             const isParamInGenDict = Object.keys(param_to_dict_mapping).includes(gen_param)
             if (isParamInGenDict) {
-                const dictParam = param_to_dict_mapping[gen_param];
+                const dictParam = dict_key_to_speech_key_mapping[param_to_dict_mapping[gen_param]];
                 gen_info_string += `${gen_param} of ${gen_entity} `;
                 for (let speechUnitIter = 0; speechUnitIter < speechUnits.length; speechUnitIter++) {
                     const speechUnit = speechUnits[speechUnitIter];
