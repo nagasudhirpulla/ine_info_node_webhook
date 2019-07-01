@@ -1,7 +1,6 @@
 "use strict";
-var lines = require('./linesInfo').lines;
-
-var headings = module.exports.headings = lines[0];
+var lines = [];
+var headings = [];
 var ss1Heading = module.exports.ss1Heading = 'End-1';
 var ss2Heading = module.exports.ss2Heading = 'End-2';
 var lengthHeading = module.exports.lengthHeading = 'Km';
@@ -12,17 +11,32 @@ var lineOwnerHeading = module.exports.lineOwnerHeading = 'Line Owner';
 var ss1OwnerHeading = module.exports.ss1OwnerHeading = 'End-1 Owner';
 var ss2OwnerHeading = module.exports.ss2OwnerHeading = 'End-2 Owner';
 var voltHeading = module.exports.voltHeading = 'voltage';
-var ss1Index = module.exports.ss1Index = headings.indexOf(ss1Heading);
-var ss2Index = module.exports.ss2Index = headings.indexOf(ss2Heading);
-var lengthIndex = module.exports.lengthIndex = headings.indexOf(lengthHeading);
-var conductorIndex = module.exports.conductorIndex = headings.indexOf(conductorHeading);
-var silIndex = module.exports.silIndex = headings.indexOf(silHeading);
-var noLoadMvarIndex = module.exports.noLoadMvarIndex = headings.indexOf(noLoadMvarHeading);
-var lineOwnerIndex = module.exports.lineOwnerIndex = headings.indexOf(lineOwnerHeading);
-var ss1OwnerIndex = module.exports.ss1OwnerIndex = headings.indexOf(ss1OwnerHeading);
-var ss2OwnerIndex = module.exports.ss2OwnerIndex = headings.indexOf(ss2OwnerHeading);
-var voltIndex = module.exports.voltIndex = headings.indexOf(voltHeading);
+var ss1Index = module.exports.ss1Index = -1;
+var ss2Index = module.exports.ss2Index = -1;
+var lengthIndex = module.exports.lengthIndex = -1;
+var conductorIndex = module.exports.conductorIndex = -1;
+var silIndex = module.exports.silIndex = -1;
+var noLoadMvarIndex = module.exports.noLoadMvarIndex = -1;
+var lineOwnerIndex = module.exports.lineOwnerIndex = -1;
+var ss1OwnerIndex = module.exports.ss1OwnerIndex = -1;
+var ss2OwnerIndex = module.exports.ss2OwnerIndex = -1;
+var voltIndex = module.exports.voltIndex = -1;
 
+module.exports.initLinesArray = function () {
+    //var lines = require('./linesInfo').lines;
+    lines = require('./linesInfoHelper').getLinesInfoAppState();
+    headings = lines[0];
+    ss1Index = headings.indexOf(ss1Heading);
+    ss2Index = headings.indexOf(ss2Heading);
+    lengthIndex = headings.indexOf(lengthHeading);
+    conductorIndex = headings.indexOf(conductorHeading);
+    silIndex = headings.indexOf(silHeading);
+    noLoadMvarIndex = headings.indexOf(noLoadMvarHeading);
+    lineOwnerIndex = headings.indexOf(lineOwnerHeading);
+    ss1OwnerIndex = headings.indexOf(ss1OwnerHeading);
+    ss2OwnerIndex = headings.indexOf(ss2OwnerHeading);
+    voltIndex = headings.indexOf(voltHeading);
+}
 module.exports.getLineObjBySSNames = function (ss1Str, ss2Str, lineVoltage) {
     var reqLine = null
     //search for the line
@@ -36,7 +50,7 @@ module.exports.getLineObjBySSNames = function (ss1Str, ss2Str, lineVoltage) {
         var rowVolt = (lineRow[voltIndex] + '').toLowerCase();
 
         if ((rowSS1.indexOf(lowerReqSS1) > -1 && rowSS2.indexOf(lowerReqSS2) > -1) || (rowSS2.indexOf(lowerReqSS1) > -1 && rowSS1.indexOf(lowerReqSS2) > -1)) {
-            if (lineVoltage == undefined ||lineVoltage == null || lineVoltage == '') {
+            if (lineVoltage == undefined || lineVoltage == null || lineVoltage == '') {
                 // we got a match
                 reqLine = lineRow;
                 break;
