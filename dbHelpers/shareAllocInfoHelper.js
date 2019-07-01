@@ -101,7 +101,7 @@ module.exports.handleQuery = function (queryParams, callback) {
 
 const constNameToSpeechName = function (constituent_name) {
     if (typeof constituent_name == "string") {
-        return constituent_name.replace(/_/g, ' ');
+        return constituent_name.replace(/_/g, ' ').toLowerCase();
     }
     return constituent_name;
 }
@@ -125,9 +125,9 @@ module.exports.handleQueryForBeneficiaryinfo = function (queryParams, callback) 
     }
 
     if (peak_info_rows.length <= 0) {
-        beneficiaries_info_string = `Sorry, we do not have the beneficiaries info of ${wbes_entity}`;
+        beneficiaries_info_string = `Sorry, we do not have the beneficiaries info of ${wbes_entity.toLowerCase()}`;
     } else {
-        beneficiaries_info_string += `Beneficiaries of ${wbes_entity} are ${peak_info_rows.map(a => constNameToSpeechName(a.constituent_name)).join(', ')}`;
+        beneficiaries_info_string += `Beneficiaries of ${wbes_entity.toLowerCase()} are ${peak_info_rows.map(a => constNameToSpeechName(a.constituent_name)).join(', ')}`;
     }
 
     // prepare speech text and send
