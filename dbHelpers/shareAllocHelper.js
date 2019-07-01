@@ -1,3 +1,4 @@
+// not needed, absolete
 const ShareAllocInfo = require("./share_alloc_info");
 
 module.exports.handleQuery = function (queryParams, callback) {

@@ -1,4 +1,5 @@
 "use strict";
+// not needed, absolete
 var lines = [];
 var headings = [];
 var ss1Heading = module.exports.ss1Heading = 'End-1';

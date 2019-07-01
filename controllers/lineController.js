@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const linesHelper = require("../dbHelpers/lineHelper");
+const linesHelper = require("../dbHelpers/linesInfoHelper");
 const WbesHelper = require("../dbHelpers/wbesHelper");
 const irLinkHelper = require("../dbHelpers/irLinkHelper");
 const spsHelper = require("../dbHelpers/spsHelper");
