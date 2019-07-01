@@ -115,3 +115,15 @@ shareAllocInfo.initShareAllocInfoAppState(function (errs, data) {
 
     // console.log(shareAllocInfo.getShareAllocInfoAppState());
 });
+
+const ssInfo = require('./dbHelpers/substationInfoHelper');
+ssInfo.initSubstationsInfoAppState(function (errs, data) {
+    if (errs != null && errs.length != 0) {
+        return console.log(errs);
+    }
+    // console.log(data);
+
+    console.log(`Completed reading the substations info into the global varaible`);
+
+    // console.log(ssInfo.getSubstationsInfoAppState());
+});

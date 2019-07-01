@@ -9,6 +9,7 @@ const shareAllocHelper = require("../dbHelpers/shareAllocInfoHelper");
 const geographicalInfoHelper = require("../dbHelpers/geographicalInfoHelper");
 const generatorInfoHelper = require("../dbHelpers/generatorInfoHelper");
 const generatorUnitInfoHelper = require("../dbHelpers/generatorUnitInfoHelper");
+const substationInfoHelper = require("../dbHelpers/substationInfoHelper");
 
 router.post('/', function (req, res, next) {
     var sourceName = 'webhook-line-info';
@@ -201,6 +202,20 @@ router.post('/', function (req, res, next) {
     } else if (intentName == 'generator_info' && queryParams != null) {
         speechText = '';
         generatorInfoHelper.handleQuery(queryParams, function (err, resObj) {
+            // return the response
+            if (err) {
+                speechText = 'Sorry, some error occured. Please try again...';
+            } else {
+                speechText = resObj['speechText'];
+            }
+            return res.json({
+                fulfillmentText: speechText,
+                source: sourceName
+            });
+        });
+    } else if (intentName == 'substation_lines_info' && queryParams != null) {
+        speechText = '';
+        substationInfoHelper.handleNumLinesQuery(queryParams, function (err, resObj) {
             // return the response
             if (err) {
                 speechText = 'Sorry, some error occured. Please try again...';
