@@ -95,11 +95,23 @@ linesInfo.initLinesInfoGlobalVar(function (errs, data) {
         return console.log(errs);
     }
     // console.log(data);
-    
+
     console.log(`Completed reading the transmission lines info into the global varaible`);
-    
+
     // initialize the lines array in main lineHelper js module
     // require('./dbHelpers/lineHelper').initLinesArray();
-    
+
     // console.log(linesInfo.getLinesInfoAppState());
+});
+
+const shareAllocInfo = require('./dbHelpers/shareAllocInfoHelper');
+shareAllocInfo.initShareAllocInfoAppState(function (errs, data) {
+    if (errs != null && errs.length != 0) {
+        return console.log(errs);
+    }
+    // console.log(data);
+
+    console.log(`Completed reading the share allocation info into the global varaible`);
+
+    // console.log(shareAllocInfo.getShareAllocInfoAppState());
 });
