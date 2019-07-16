@@ -92,7 +92,7 @@ module.exports.handleNumLinesQuery = function (queryParams, callback) {
         } else {
             const voltLevelKeys = ['765KV', '400KV', '220KV', '132KV', '33KV'];
             const param_to_dict_key_mapping = { "num_lines": "num_lines" };
-            const param_to_speech_word_mapping = { "num_lines": "Number of emanating lines", '132KV': '132 KV', '220KV': '220kv', '33KV': '33kv', '400KV': '400kv', '765KV': '765kv' };
+            const param_to_speech_word_mapping = { "num_lines": "Number of emanating lines", '132KV': 'one thirty two kv', '220KV': 'two twenty kv', '33KV': 'thrity three kv', '400KV': 'four hundred kv', '765KV': 'seven sixty five kv' };
             //synthesize speech based
             const isParamInGenDict = Object.keys(param_to_dict_key_mapping).includes(ss_param);
             if (isParamInGenDict) {
