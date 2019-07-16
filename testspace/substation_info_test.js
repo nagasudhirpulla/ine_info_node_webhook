@@ -5,7 +5,7 @@ ssInfo.initSubstationsInfoAppState(function (errs, data) {
     }
     // console.log(data);
     // console.log(geoInfo.getGeoInfoGlobalVar()['GADARWARA']);
-    queryParams = { substation: ['Gadarwara']};
+    queryParams = { pwc_substation: ['Bhuj']};
     ssInfo.handleNumLinesQuery(queryParams, function (err, data) {
         console.log(data);
     });
