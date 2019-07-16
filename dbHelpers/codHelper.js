@@ -1,3 +1,4 @@
+// absolete
 const CODInfo = require("./cod_info");
 
 module.exports.handleQuery = function (queryParams, callback) {

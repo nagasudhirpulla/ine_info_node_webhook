@@ -26,12 +26,17 @@ module.exports.initGenUnitInfoGlobalVar = function (callback) {
         'ramp': {
             prop: 'ramp',
             type: String,
-            required: true
+            required: false
         },
         'trial_run_date': {
             prop: 'trial_run_date',
             type: Date,
-            required: true
+            required: false
+        },
+        'cod_date': {
+            prop: 'cod_date',
+            type: Date,
+            required: false
         }
     }
     const path = require('path');
@@ -94,24 +99,31 @@ module.exports.handleQuery = function (queryParams, callback) {
             })
         }
 
-        const param_to_dict_mapping = { "ramp": "ramp", "trial_run_date": "trial_run_date" }
-        const param_to_speech_key_mapping = { "ramp": "Ramp rate", "trial_run_date": "Trial run date" }
+        const param_to_dict_mapping = { "ramp": "ramp", "trial_run_date": "trial_run_date", "cod_date": "cod_date" }
+        const param_to_speech_key_mapping = { "ramp": "Ramp rate", "trial_run_date": "Trial run date", "cod_date": "C.O.D date" }
         //synthesize speech based on the units selected
         if (speechUnits.length > 0 && gen_param != null) {
             const isParamInGenDict = Object.keys(param_to_dict_mapping).includes(gen_param)
             if (isParamInGenDict) {
                 const dictParam = param_to_dict_mapping[gen_param];
+                let numUnitsHit = 0;
                 gen_info_string += `${param_to_speech_key_mapping[gen_param]} of ${gen_entity} `;
                 for (let speechUnitIter = 0; speechUnitIter < speechUnits.length; speechUnitIter++) {
                     const speechUnit = speechUnits[speechUnitIter];
                     let genUnitinfo = gen_units_info_obj[speechUnit][0][dictParam];
-                    if (dictParam == 'trial_run_date') {
-                        genUnitinfo = convertDateObjToSpeechDate(genUnitinfo);
+                    if (genUnitinfo != undefined) {
+                        if (['trial_run_date', 'cod_date'].includes(dictParam)) {
+                            genUnitinfo = convertDateObjToSpeechDate(genUnitinfo);
+                        }
+                        gen_info_string += `unit ${speechUnit} is ${genUnitinfo}${(speechUnitIter != speechUnits.length - 1) ? ', ' : ''}`;
+                        numUnitsHit = numUnitsHit + 1;
                     }
-                    gen_info_string += `unit ${speechUnit} is ${genUnitinfo}${(speechUnitIter != speechUnits.length - 1) ? ', ' : ''}`;
+                }
+                if (numUnitsHit == 0) {
+                    gen_info_string = `Sorry, we donot have the ${gen_param} info of ${gen_entity}`;
                 }
             } else {
-                gen_info_string += `Sorry, we donot have the ${gen_param} info of ${gen_entity}`;
+                gen_info_string = `Sorry, we donot have the ${gen_param} info of ${gen_entity}`;
             }
         } else {
             gen_info_string += `Sorry, we donot have the ${gen_param} info of ${gen_entity} ${((gen_unit_name != null) ? "unit " + gen_unit_name : "")}`;

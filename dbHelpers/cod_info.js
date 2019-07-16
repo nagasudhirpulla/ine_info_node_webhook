@@ -1,3 +1,4 @@
+// absolete, migrated to excel sheet
 module.exports.cod_dates = {
     "GADARWARA": {
         "unit 1": "2019-06-01"

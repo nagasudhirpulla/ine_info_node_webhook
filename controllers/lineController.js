@@ -3,7 +3,7 @@ const linesHelper = require("../dbHelpers/linesInfoHelper");
 const WbesHelper = require("../dbHelpers/wbesHelper");
 const irLinkHelper = require("../dbHelpers/irLinkHelper");
 const spsHelper = require("../dbHelpers/spsHelper");
-const codHelper = require("../dbHelpers/codHelper");
+// const codHelper = require("../dbHelpers/codHelper");
 // const shareAllocHelper = require("../dbHelpers/shareAllocHelper");
 const shareAllocHelper = require("../dbHelpers/shareAllocInfoHelper");
 const geographicalInfoHelper = require("../dbHelpers/geographicalInfoHelper");
@@ -140,21 +140,6 @@ router.post('/', function (req, res, next) {
                 source: sourceName
             });
         });
-    } else if (intentName == 'cod_info' && queryParams != null) {
-        speechText = '';
-
-        codHelper.handleQuery(queryParams, function (err, resObj) {
-            // return the response
-            if (err) {
-                speechText = 'Sorry, some error occured. Please try again...';
-            } else {
-                speechText = resObj['speechText'];
-            }
-            return res.json({
-                fulfillmentText: speechText,
-                source: sourceName
-            });
-        });
     } else if (intentName == 'share_alloc_info' && queryParams != null) {
         speechText = '';
 
@@ -227,12 +212,14 @@ router.post('/', function (req, res, next) {
                 source: sourceName
             });
         });
-    } else if (['generator_ramp_info', 'generator_trial_run_date_info'].includes(intentName) && queryParams != null) {
+    } else if (['generator_ramp_info', 'generator_trial_run_date_info', 'cod_info'].includes(intentName) && queryParams != null) {
         speechText = '';
         if (intentName == 'generator_ramp_info') {
             queryParams['generator_parameter'] = ['ramp'];
         } else if (intentName == 'generator_trial_run_date_info') {
             queryParams['generator_parameter'] = ['trial_run_date'];
+        } else if (intentName == 'cod_info') {
+            queryParams['generator_parameter'] = ['cod_date'];
         }
         generatorUnitInfoHelper.handleQuery(queryParams, function (err, resObj) {
             // return the response

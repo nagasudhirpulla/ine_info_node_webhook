@@ -3,9 +3,8 @@ genUnitInfo.initGenUnitInfoGlobalVar(function (errs, data) {
     if (errs != null && errs.length != 0) {
         return console.log(errs);
     }
-    console.log(JSON.stringify(data));
-    // console.log(geoInfo.getGeoInfoGlobalVar()['GADARWARA']);
-    queryParams = { generator_entity: ['Solapur'], generator_parameter: ['ramp'] };
+    // console.log(JSON.stringify(data));
+    queryParams = { generator_entity: ['SKS'], generator_parameter: ['cod_date'] };
     genUnitInfo.handleQuery(queryParams, function (err, data) {
         console.log(data);
     });
