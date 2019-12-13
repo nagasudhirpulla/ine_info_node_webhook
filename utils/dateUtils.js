@@ -4,7 +4,7 @@
 const makeTwoDigits = require('./stringUtils').makeTwoDigits;
 var convertDateObjToSpeechDate = module.exports.convertDateObjToSpeechDate = function (dateObj) {
     if (dateObj != undefined && dateObj != null && typeof dateObj.getDate == 'function') {
-        const dateStr = `${dateObj.getFullYear()}-${makeTwoDigits(dateObj.getMonth()+1)}-${makeTwoDigits(dateObj.getDate()+1)}`
+        const dateStr = `${dateObj.getFullYear()}-${makeTwoDigits(dateObj.getMonth()+1)}-${makeTwoDigits(dateObj.getDate())}`
         return dateStr;
     }
     return dateObj;
