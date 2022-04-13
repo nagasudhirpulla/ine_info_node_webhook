@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/nagasudhirpulla/ine_info_node_webhook#readme",
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^3.2.2",
     "body-parser": "^1.18.3",
     "cookie": "^0.3.1",
     "express": "^4.16.3",
